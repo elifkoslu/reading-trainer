@@ -1,0 +1,1101 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Okuma antrenmanı</title>
+<meta name="theme-color" content="#EDF0F3" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#12171D" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Okuma">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png" sizes="192x192" type="image/png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,400;7..72,600&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme: light;
+  --paper:#EDF0F3; --surface:#FFFFFF; --ink:#18222E; --muted:#5B6775; --line:#CDD5DE;
+  --accent:#24476B; --on-accent:#FFFFFF; --mark:#F5DC4A; --mark-ink:#18222E;
+  --good:#2E6B57; --low:#A9472F; --good-bg:#E3F0EA; --low-bg:#F6E5E0;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme: dark;
+    --paper:#12171D; --surface:#1A212A; --ink:#E4E9EF; --muted:#98A4B3; --line:#2E3946;
+    --accent:#8FB3D9; --on-accent:#0F1720; --mark:#6E5E12; --mark-ink:#FFF6CF;
+    --good:#74C7A8; --low:#E9937A; --good-bg:#18302A; --low-bg:#35211C;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --paper:#12171D; --surface:#1A212A; --ink:#E4E9EF; --muted:#98A4B3; --line:#2E3946;
+  --accent:#8FB3D9; --on-accent:#0F1720; --mark:#6E5E12; --mark-ink:#FFF6CF;
+  --good:#74C7A8; --low:#E9937A; --good-bg:#18302A; --low-bg:#35211C;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px);background:var(--paper)}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:"Manrope",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+img{max-width:100%}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.wrap{max-width:680px;margin:0 auto;padding:20px 18px 40px}
+header.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:28px}
+.brand{background:none;border:0;padding:0;cursor:pointer;font-family:"Literata",Georgia,"Times New Roman",serif;font-weight:600;font-size:1.45rem;letter-spacing:-.01em}
+nav.tabs{display:flex;gap:2px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:3px}
+nav.tabs button{background:none;border:0;padding:6px 12px;border-radius:7px;cursor:pointer;font-size:.9rem;color:var(--muted)}
+nav.tabs button[aria-current="page"]{background:var(--paper);color:var(--ink);font-weight:700}
+h1,h2,h3{line-height:1.25}
+.muted{color:var(--muted)}
+.small{font-size:.875rem}
+.sec{font-size:1rem;font-weight:700;margin:40px 0 10px}
+.hero{font-family:"Literata",Georgia,serif;font-weight:600;font-size:clamp(2rem,7vw,2.9rem);letter-spacing:-.02em;margin:4px 0 12px}
+.marker{background-image:linear-gradient(transparent 58%,var(--mark) 58%,var(--mark) 92%,transparent 92%);background-repeat:no-repeat;background-size:100% 100%;animation:swipe .7s .15s cubic-bezier(.3,.7,.2,1) both;padding:0 .08em}
+@keyframes swipe{from{background-size:0% 100%}to{background-size:100% 100%}}
+@media (prefers-reduced-motion: reduce){.marker{animation:none}}
+.langs{display:flex;gap:6px;margin-bottom:22px}
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:5px 14px;cursor:pointer;font-size:.9rem}
+.chip.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.btn{display:inline-block;background:var(--accent);color:var(--on-accent);border:0;border-radius:9px;padding:11px 20px;font-weight:700;cursor:pointer;font-size:1rem}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn.sm{padding:7px 12px;font-size:.9rem}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.back{background:none;border:0;padding:0;color:var(--muted);cursor:pointer;margin-bottom:18px;font-size:.95rem}
+.exlist{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.exlist li{border-bottom:1px solid var(--line)}
+.exrow{display:grid;grid-template-columns:1fr auto;gap:2px 12px;width:100%;text-align:left;background:none;border:0;padding:14px 2px;cursor:pointer}
+.exrow:hover .exname{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px}
+.exname{font-weight:700}
+.exdev{grid-row:1;grid-column:2;font-size:.8rem;color:var(--muted);align-self:center}
+.exdesc{grid-column:1/-1;color:var(--muted);font-size:.92rem}
+.read{font-family:"Literata",Georgia,"Times New Roman",serif;font-size:1.13rem;line-height:1.75;max-width:64ch}
+.read h3{font-family:"Manrope",system-ui,sans-serif;font-size:1rem;font-weight:700;margin:1.6em 0 .3em}
+.read p{margin:0 0 1em}
+.read .w{border-radius:.15em}
+.read .hl{background:var(--mark);color:var(--mark-ink);box-shadow:0 0 0 .12em var(--mark)}
+.readhead{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:12px}
+.title{font-family:"Literata",Georgia,serif;font-weight:600;font-size:1.5rem;margin:0 0 4px}
+.clock{font-variant-numeric:tabular-nums;font-weight:700}
+.dock{position:sticky;bottom:0;background:var(--paper);border-top:1px solid var(--line);padding:12px 0 calc(12px + env(safe-area-inset-bottom,0px));margin-top:16px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;z-index:5}
+.dock .grow{flex:1}
+.bar{height:6px;background:var(--line);border-radius:6px;overflow:hidden;margin:6px 0 18px}
+.bar i{display:block;height:100%;background:var(--accent);width:100%}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px}
+.qitem{border:0;padding:0;margin:0 0 26px}
+.qitem legend{font-weight:700;margin-bottom:10px;padding:0}
+.opt{display:block;width:100%;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:9px;padding:10px 14px;margin-bottom:8px;cursor:pointer}
+.opt[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.opt.ok{border-color:var(--good);background:var(--good-bg)}
+.opt.bad{border-color:var(--low);background:var(--low-bg)}
+.opt:disabled{cursor:default}
+.flag{background:none;border:0;padding:0;color:var(--muted);font-size:.85rem;text-decoration:underline;cursor:pointer}
+.qitem.voided legend{text-decoration:line-through;color:var(--muted)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:16px 0}
+.stat{background:var(--surface);padding:14px 16px}
+.stat b{display:block;font-family:"Literata",Georgia,serif;font-size:1.9rem;font-weight:600;font-variant-numeric:tabular-nums;line-height:1.1}
+.stat span{color:var(--muted);font-size:.85rem}
+.note{border-left:3px solid var(--line);padding:4px 0 4px 12px;margin:14px 0;color:var(--muted)}
+.note.low{border-color:var(--low);color:var(--ink)}
+.note.good{border-color:var(--good);color:var(--ink)}
+.firsts{list-style:none;padding:0;margin:0}
+.firsts li{margin:0 0 .9em}
+.firsts h3{margin:1.2em 0 .2em}
+textarea,input[type=text],select{width:100%;font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:9px;padding:10px 12px}
+textarea{min-height:110px;resize:vertical}
+label.f{display:block;font-weight:700;font-size:.9rem;margin:14px 0 6px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tlist{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.tlist li{border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px}
+.tpick{flex:1;text-align:left;background:none;border:0;padding:13px 2px;cursor:pointer}
+.tpick b{display:block}
+.tag{font-size:.78rem;color:var(--muted)}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.92rem;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font-weight:700;color:var(--muted);font-size:.82rem}
+tr.low td{color:var(--muted)}
+.spark{width:100%;height:90px;display:block}
+.foot{max-width:680px;margin:0 auto;padding:0 18px 30px;color:var(--muted);font-size:.82rem}
+.qbig{font-family:"Literata",Georgia,serif;font-size:1.35rem;font-weight:600;margin:6px 0 16px}
+.err{color:var(--low)}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:10px 16px;border-radius:9px;font-size:.9rem;z-index:20;max-width:calc(100% - 32px)}
+.hidden{display:none}
+body{overscroll-behavior-y:none;-webkit-tap-highlight-color:transparent}
+@media (max-width:480px){.grid2{grid-template-columns:1fr}.read{font-size:1.06rem}}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<footer class="foot" id="foot"></footer>
+<script>
+"use strict";
+/* ---------- Built-in practice texts (fictional, written for this app) ---------- */
+const TEXTS = [
+{id:"tr-rapor-1",lang:"tr",genre:"Rapor",title:"Altınova Seramik: üçüncü çeyrek özeti",blocks:[
+{h:"Genel durum"},
+{p:"Üçüncü çeyrekte üretim hedefinin yüzde 94’üne ulaşıldı. Hedefin altında kalmamızın ana nedeni, ağustos ayında iki hafta süren fırın bakımıydı. Bakım planlanandan altı gün uzun sürdü, çünkü yedek brülör parçaları tedarikçiden geç geldi. Buna rağmen satış tarafında güçlü bir dönem geçirdik: yurt içi siparişler bir önceki çeyreğe göre yüzde 12 arttı."},
+{h:"Satış ve müşteriler"},
+{p:"Artışın büyük kısmı otel projelerinden geldi. En büyük yeni müşterimiz, Ege kıyısında üç tesis işleten Mavikum Turizm oldu; şirketle 18 ay sürecek bir çerçeve anlaşma imzalandı. İhracatta ise tablo daha durgun. Almanya’daki distribütörümüz stok fazlası nedeniyle eylül siparişini erteledi ve bu erteleme ihracat gelirini yaklaşık 410 bin lira aşağı çekti."},
+{h:"Maliyetler"},
+{p:"Doğalgaz giderleri çeyrek boyunca beklenenden yüzde 8 yüksek gerçekleşti. Satın alma ekibi ekimden itibaren geçerli olacak sabit fiyatlı yeni bir sözleşme için görüşmeleri sürdürüyor; görüşmeleri Selin Aydemir yürütüyor. Hammadde tarafında kil fiyatları sabit kaldı, ancak sır malzemelerinde döviz kaynaklı bir artış var."},
+{h:"Dördüncü çeyrek için öneriler"},
+{p:"Fırın bakımının bir daha üretimi aksatmaması için yedek parçalardan en az bir setin stokta tutulmasını öneriyoruz; bunun tahmini maliyeti 260 bin lira. İkinci önerimiz, ihracatta tek distribütöre bağımlılığı azaltmak için Hollanda’da ikinci bir ortak aramak. Bu konuda ilk görüşmeler kasım ayındaki fuarda yapılabilir. Son olarak, otel projelerindeki başarının sürmesi için bu segmente özel bir satış temsilcisi atanmasını değerlendirmeliyiz."},
+{p:"Özetle: satışlar güçlü, üretim ve ihracat kırılgan. Dördüncü çeyreğin önceliği, büyümeyi taşıyacak altyapıyı sağlamlaştırmak olmalı."}],
+q:[
+{q:"Metnin ana mesajı hangisi?",o:["Satışlar güçlü ama üretim ve ihracat kırılgan; altyapı sağlamlaştırılmalı","Şirket doğalgaz maliyetleri yüzünden zarar etti","Almanya’daki distribütörle ilişki sonlandırılmalı","Otel projeleri şirketin tek gelir kaynağı oldu"],a:0},
+{q:"Üretim hedefinin altında kalınmasının ana nedeni neydi?",o:["Kil fiyatlarındaki artış","Fırın bakımının uzaması","Personel eksikliği","Sipariş iptalleri"],a:1},
+{q:"Fırın bakımı neden planlanandan uzun sürdü?",o:["Yedek parçalar geç geldi","Teknik ekip izindeydi","Doğalgaz kesintisi oldu","Yeni fırın kuruldu"],a:0},
+{q:"İhracatla ilgili önerilen adım hangisi?",o:["Almanya’da ikinci bir depo açmak","Hollanda’da ikinci bir ortak aramak","İhracatı geçici olarak durdurmak","Fiyatları düşürmek"],a:1}],
+scan:[
+{q:"Yedek parça stokunun tahmini maliyeti ne kadar?",o:["260 bin lira","410 bin lira","180 bin lira","94 bin lira"],a:0},
+{q:"Doğalgaz sözleşmesi görüşmelerini kim yürütüyor?",o:["Mavikum Turizm","Selin Aydemir","Yeni satış temsilcisi","Almanya’daki distribütör"],a:1}]},
+
+{id:"tr-yanit-1",lang:"tr",genre:"Yanıt",title:"Toplantılar neden hep konudan sapıyor?",blocks:[
+{h:"Soru: Haftalık ekip toplantılarımız sürekli konudan sapıyor ve bir saati buluyor. Ne yapabilirim?"},
+{p:"Kısa cevap: Sorun büyük ihtimalle disiplin değil, toplantının amacının belirsiz olması. Amacı netleştirip gündemi karar odaklı hale getirirsen sapmalar kendiliğinden azalır."},
+{h:"Neden sapıyor?"},
+{p:"Bir toplantıda bilgi paylaşımı, sorun çözme ve karar alma aynı anda yapılmaya çalışıldığında, konuşma doğal olarak en çok ilgi çeken konuya kayar. Herkesin aklındaki “bu toplantı ne için?” sorusunun cevabı farklıysa, her katılımcı kendi cevabına göre konuşur."},
+{h:"Ne yapabilirsin?"},
+{p:"İlk adım, bilgi paylaşımını toplantıdan çıkarmak. Durum güncellemeleri toplantıdan bir gün önce yazılı olarak paylaşılabilir; toplantıda yalnızca sorular ve itirazlar konuşulur. Bu tek değişiklik çoğu ekipte sürenin ciddi bir kısmını geri kazandırır."},
+{p:"İkinci adım, gündem maddelerini soru olarak yazmak. “Kampanya” yerine “Kampanyayı iki hafta erteleyelim mi?” yazdığında, tartışmanın neyle biteceği baştan bellidir."},
+{p:"Üçüncü adım, sapmaları bastırmak yerine park etmek. Gündem dışı ama önemli bir konu çıktığında bir park listesine yazılır ve toplantı sonunda kimin, ne zaman ele alacağına karar verilir. Böylece konuyu açan kişi dinlendiğini hisseder, toplantı da yoluna devam eder."},
+{h:"Dikkat edilmesi gereken"},
+{p:"Bu yöntemler, ekipte görüşlerini toplantı dışında söyleyemeyen insanlar varsa ters tepebilir. Sapmaların arkasında başka bir yerde dile getirilemeyen bir rahatsızlık yatıyorsa, sorunu gündemle değil, o konuyu konuşacak ayrı bir alan açarak çözmek gerekir."}],
+q:[
+{q:"Metnin ana mesajı hangisi?",o:["Sapmaların asıl nedeni amaç belirsizliği; gündemi karar odaklı yapmak çözüm","Toplantılar tamamen kaldırılmalı","Konudan sapan katılımcılar uyarılmalı","Toplantı süresi yarım saate indirilmeli"],a:0},
+{q:"Durum güncellemeleri için ne öneriliyor?",o:["Toplantının başında sözlü paylaşılması","Toplantıdan önce yazılı paylaşılması","Tamamen kaldırılması","Ay sonunda toplu raporlanması"],a:1},
+{q:"Gündem maddelerini soru olarak yazmanın faydası ne?",o:["Gündem kısalır","Tartışmanın neyle biteceği baştan bellidir","Katılımcı sayısı azalır","Yöneticinin söz hakkı artar"],a:1},
+{q:"Önerilen yöntemler hangi durumda ters tepebilir?",o:["Ekip çok büyükse","Toplantı uzaktan yapılıyorsa","Görüşlerini başka yerde söyleyemeyen insanlar varsa","Gündem çok uzunsa"],a:2}],
+scan:[
+{q:"Gündem dışı konular nereye yazılıyor?",o:["Toplantı tutanağına","Park listesine","Ortak takvime","Yöneticinin not defterine"],a:1},
+{q:"Örnek gündem sorusunda kampanya ne kadar ertelenecekti?",o:["Bir hafta","İki hafta","Bir ay","Üç gün"],a:1}]},
+
+{id:"tr-deneme-1",lang:"tr",genre:"Deneme",title:"Yavaşlığın hakkı",blocks:[
+{p:"Hızlı okumayı öğrenmek isteyen herkesin bir gün karşılaştığı bir paradoks var: bazı metinler hızlandıkça değil, yavaşladıkça açılır. Bir rapordaki teslim tarihini bulmak için satır satır okumak zaman kaybıdır; ama iyi bir şiiri ya da bir dostun uzun mektubunu göz gezdirerek okumak, onu hiç okumamaktan pek farklı değildir."},
+{p:"Bu yüzden asıl beceri, tek bir hızda ustalaşmak değil, vitesler arasında geçiş yapabilmektir. Usta bir sürücü otoyolda da dar sokakta da aynı hızla gitmez. Okuyucu da önündeki metnin ne istediğini sezmeli: Bu metinden bir bilgi mi alacağım, bir karar mı vereceğim, yoksa bir deneyim mi yaşayacağım?"},
+{p:"Bilgi için okurken hız bir erdemdir. Karar için okurken metnin iddialarını tartmak gerekir ve bu, cümlelerin arasında durmayı gerektirir. Deneyim için okurken ise hız neredeyse anlamsızdır; bir romanın son sayfasına ne kadar çabuk vardığımız, yolculuğun kendisi hakkında hiçbir şey söylemez."},
+{p:"Bugün okuduğumuz metinlerin büyük kısmı ilk kategoriye giriyor: e-postalar, raporlar, haberler, uzun yanıtlar. Bu metinlerde hızlanmak gerçekten zaman kazandırır ve kazanılan zaman ikinci ve üçüncü tür okumaya ayrılabilir. Belki de hızlı okumanın en iyi gerekçesi budur: yavaş okunmayı hak eden metinlere yer açmak."},
+{p:"O halde hız çalışırken kendimize sormamız gereken soru “Ne kadar hızlı okuyabilirim?” değil, “Bu metni ne kadar hızlı okumalıyım?” olmalı. İlki bir rekordur, ikincisi bir yargı. İyi bir okuyucuyu belirleyen de rekorlarından çok yargılarıdır."}],
+q:[
+{q:"Metnin ana fikri hangisi?",o:["Asıl beceri, okuma hızını metnin türüne göre ayarlayabilmektir","Hızlı okuma her metinde zaman kazandırır","Şiir ve roman hiç hızlı okunmamalıdır","Günümüzde okuma alışkanlığı azalmıştır"],a:0},
+{q:"Yazara göre hangi okuma türünde hız neredeyse anlamsızdır?",o:["Bilgi için okuma","Karar için okuma","Deneyim için okuma","Rapor okuma"],a:2},
+{q:"Yazar sürücü örneğini ne için kullanıyor?",o:["Dikkat dağınıklığını anlatmak için","Farklı durumlarda farklı hızlarda gitmeyi anlatmak için","Trafik kurallarını eleştirmek için","Okumanın yorucu olduğunu göstermek için"],a:1},
+{q:"Yazara göre hızlı okumanın en iyi gerekçesi ne?",o:["Daha çok kitap bitirmek","Sınavlarda başarılı olmak","Yavaş okunmayı hak eden metinlere zaman açmak","Başkalarından hızlı olmak"],a:2}],
+scan:[
+{q:"Karar için okurken ne yapmak gerekiyor?",o:["Metnin iddialarını tartmak","Sadece başlıkları okumak","Metni ezberlemek","Sesli okumak"],a:0},
+{q:"Yazara göre iyi bir okuyucuyu ne belirler?",o:["Rekorları","Okuduğu kitap sayısı","Yargıları","Kelime hazinesi"],a:2}]},
+
+{id:"tr-oyku-1",lang:"tr",genre:"Öykü",title:"Saat tamircisi",blocks:[
+{p:"Kasabanın tek saat tamircisi Nuri Usta, dükkânını her sabah aynı saatte açardı. Bunu bir saate bakarak yapmazdı; dükkândaki kırk iki saatin hiçbiri aynı zamanı göstermezdi zaten. Kapıyı, karşıdaki fırından ilk ekmek kokusu geldiğinde açardı."},
+{p:"Bir kış sabahı dükkâna on yaşlarında bir kız girdi. Elinde camı çatlamış eski bir cep saati vardı. “Dedemin,” dedi. “Annem bunu atmak istiyor ama ben çalışsın istiyorum.” Nuri Usta saati ışığa tuttu, kapağını açtı, uzun süre içine baktı. Sonra kıza, tamirin üç hafta süreceğini ve parasını şimdi ödemesine gerek olmadığını söyledi."},
+{p:"Kız her cumartesi gelip saatin durumunu sordu. Nuri Usta her seferinde ona saatin içinden bir parça gösterdi: önce zembereği, sonra çarkları, en son da minicik bir yakutu. “Bu taş,” dedi, “saatin en çok sürtünen yerine konur. Değerli olduğu için değil, yorulmadığı için.”"},
+{p:"Üçüncü haftanın sonunda saat çalışıyordu. Kız saati kulağına götürdüğünde yüzü aydınlandı. Ücreti sorduğunda Nuri Usta biraz düşündü ve ona boş bir defter uzattı. “Ücret şu,” dedi. “Bundan sonra her bozuk şeyi atmadan önce bir kez içine bak ve ne gördüğünü bu deftere yaz.”"},
+{p:"Yıllar sonra o defter kalın bir cilde dönüşmüştü. İçinde bozuk radyolar, durmuş müzik kutuları ve bir zamanlar çalmayan bir bisiklet zili vardı. Defterin ilk sayfasında ise tek bir cümle yazıyordu: “Bir şeyin neden durduğunu anlamak, onu yeniden çalıştırmanın yarısıdır.”"}],
+q:[
+{q:"Öykünün ana fikri hangisi?",o:["Bir şeyin işleyişini anlamaya çalışmanın değeri","Eski eşyaların atılması gerektiği","Saat tamirciliğinin zor bir meslek olduğu","Kasabadaki fırının önemi"],a:0},
+{q:"Nuri Usta dükkânı açma zamanını neye göre belirlerdi?",o:["Kol saatine","Cami ezanına","Fırından gelen ekmek kokusuna","Güneşin doğuşuna"],a:2},
+{q:"Nuri Usta yakutun neden kullanıldığını söyledi?",o:["Değerli olduğu için","Yorulmadığı için","Parlak olduğu için","Hafif olduğu için"],a:1},
+{q:"Tamir ücreti olarak kızdan ne istendi?",o:["Hiçbir şey","Bozuk şeyleri atmadan önce incelemesi ve deftere yazması","Her cumartesi dükkâna yardım etmesi","Dedesinin başka bir saatini getirmesi"],a:1}],
+scan:[
+{q:"Dükkânda kaç saat vardı?",o:["Yirmi dört","Kırk iki","On iki","Otuz"],a:1},
+{q:"Tamir kaç hafta sürdü?",o:["Bir","İki","Üç","Dört"],a:2}]},
+
+{id:"en-report-1",lang:"en",genre:"Report",title:"Northfield Library renovation: project update",blocks:[
+{h:"Summary"},
+{p:"The renovation of Northfield Public Library is now roughly two-thirds complete. The new children’s wing opened on schedule, but the reading hall on the second floor will reopen about five weeks later than planned. The delay is caused by water damage discovered behind the old shelving, which required replacing part of the floor."},
+{h:"Budget"},
+{p:"Total spending to date is 1.84 million dollars, against an approved budget of 2.6 million. The floor repair added an unplanned cost of 145,000 dollars. The project team believes this can be absorbed by the contingency fund, so no additional request to the city council is needed at this stage."},
+{h:"Community feedback"},
+{p:"Visitor surveys about the children’s wing are very positive, with families especially praising the new quiet reading corners. The most common complaint concerns parking: the temporary lot is small and fills up by mid-morning on weekends. Facilities manager Daniel Ortiz is discussing a weekend arrangement with the neighbouring school to use its parking area."},
+{h:"Next steps"},
+{p:"Three decisions are needed from the steering committee this month. First, whether to move the opening ceremony for the reading hall to January. Second, whether to keep the extended evening hours introduced during construction, which have proven popular with students. Third, whether to use the remaining contingency to upgrade the hall’s lighting now rather than in a separate project next year."},
+{p:"In short, the project is on budget but behind schedule, and this month’s decisions will shape how the remaining work is delivered."}],
+q:[
+{q:"What is the main message of the text?",o:["The project is within budget but delayed, and key decisions are needed","The library will close permanently","The project needs extra money from the city council","The children’s wing was a failure"],a:0},
+{q:"What caused the delay of the reading hall?",o:["A shortage of workers","Water damage behind the old shelving","A change in the design","Bad weather"],a:1},
+{q:"How will the unplanned floor cost be covered?",o:["By the contingency fund","By a new council request","By cutting evening hours","By a donation from the school"],a:0},
+{q:"What is the most common visitor complaint?",o:["Noise","Parking","Opening hours","Lack of books"],a:1}],
+scan:[
+{q:"How much did the floor repair add?",o:["145,000 dollars","1.84 million dollars","260,000 dollars","2.6 million dollars"],a:0},
+{q:"Who is discussing the parking arrangement with the school?",o:["The city council","Daniel Ortiz","The steering committee","The head librarian"],a:1}]},
+
+{id:"en-answer-1",lang:"en",genre:"Answer",title:"Learn a new tool or go deeper with the one you know?",blocks:[
+{h:"Question: I’m comfortable with one project management tool. Should I learn a new one or go deeper with the one I already use?"},
+{p:"Short answer: go deeper, unless your current tool is blocking something specific you need to do. Switching has hidden costs that are easy to underestimate, while depth tends to pay off quietly."},
+{h:"Why depth usually wins"},
+{p:"Most people use only a small part of the tools they already have. Learning features like templates, automations or saved views often removes the very frustrations that make a new tool look attractive. A new tool also brings a learning curve, a migration effort and, if you work with others, the task of convincing them to switch too."},
+{h:"When switching makes sense"},
+{p:"Switching is worth considering when you can name a concrete limitation, not just a feeling. For example, your team needs to collaborate with external partners and your tool cannot share projects outside the organisation. In that case, write the limitation down first and check whether the new tool really solves it before you invest time."},
+{h:"A simple test"},
+{p:"Before deciding, spend one week deliberately learning three features of your current tool that you have never used. If your frustration disappears, you have saved yourself a migration. If it doesn’t, you now know exactly what to look for in a replacement, which makes the comparison much faster."},
+{p:"One caveat: if your organisation is already moving to another tool, depth in the old one has limited value. In that case, the decision has effectively been made for you."}],
+q:[
+{q:"What is the main idea of the answer?",o:["Usually deepen your current tool; switch only for a concrete limitation","Always switch to the newest tool","Tools don’t matter, only habits do","Learn as many tools as possible"],a:0},
+{q:"Which hidden cost of switching is mentioned?",o:["Higher subscription prices","Convincing others to switch too","Losing old files permanently","Needing new hardware"],a:1},
+{q:"What does the simple test involve?",o:["Trying the new tool for a month","Learning three unused features of the current tool for a week","Asking colleagues to vote","Reading online reviews"],a:1},
+{q:"When does depth in the old tool have limited value?",o:["When the tool is expensive","When the organisation is already moving to another tool","When you work alone","When the tool has many features"],a:1}],
+scan:[
+{q:"Which example limitation is given?",o:["No mobile app","Cannot share projects outside the organisation","No dark mode","Too slow to load"],a:1},
+{q:"How long should the simple test last?",o:["One day","One week","One month","Three months"],a:1}]}
+];
+
+/* ---------- Topic texts for the Ela program (explanatory, written for this app) ---------- */
+TEXTS.push(
+{id:"tr-konu-erteleme",lang:"tr",genre:"Erteleme",title:"Erteleme neden bir zaman yönetimi sorunu değil?",blocks:[
+{p:"Erteleyen birine genellikle daha iyi bir takvim tutması önerilir. Ancak erteleme üzerine çalışan araştırmacıların önemli bir kısmı, sorunun zamanla değil duygularla ilgili olduğunu savunuyor. Bu görüşe göre erteleme, bir görevin uyandırdığı hoş olmayan duygudan kısa süreliğine kaçma girişimidir."},
+{h:"Kısa vadeli rahatlama"},
+{p:"Sıkıcı, belirsiz ya da başarısızlık korkusu uyandıran bir görevle karşılaştığımızda, onu bırakıp başka bir şeye yönelmek anında rahatlatır. Bu rahatlama bir tür ödül gibi çalışır ve davranışı pekiştirir. Sorun, rahatlamanın geçici olmasıdır: görev yerinde durur, üstüne bir de suçluluk ve stres eklenir. Böylece bir sonraki sefer görev daha da itici hale gelir."},
+{h:"Bugünkü ben ve gelecekteki ben"},
+{p:"İnsanlar yakın ödülleri uzak ödüllere göre daha değerli bulma eğilimindedir. Bugün hissettiğimiz rahatsızlık çok somutken, görevi bitirmenin getireceği fayda uzak ve soyut kalır. Bazı araştırmacılar, insanların gelecekteki kendilerini neredeyse bir yabancı gibi düşündüğünü ve işi ona bırakmanın bu yüzden kolay geldiğini öne sürüyor."},
+{h:"Ne işe yarıyor?"},
+{p:"Bu bakış açısından en işe yarar yaklaşım, görevin uyandırdığı duyguyu azaltmaktır. Görevi çok küçük bir ilk adıma indirmek, örneğin “sadece dosyayı açacağım” demek, başlama eşiğini düşürür. Başladıktan sonra devam etmek çoğu zaman beklenenden kolaydır. Ertelediği için kendini sert biçimde eleştirmek yerine kendine anlayış göstermenin sonraki ertelemeyi azaltabileceğini gösteren çalışmalar da var, ancak bu alandaki bulgular henüz sınırlı."}],
+q:[
+{q:"Metnin ana fikri hangisi?",o:["Erteleme temelde hoş olmayan duygulardan kaçma çabasıdır","Erteleme kötü bir takvim kullanmaktan kaynaklanır","Erteleme yalnızca tembel insanlarda görülür","Erteleme uzun vadede stresi azaltır"],a:0},
+{q:"Görevden kaçmanın getirdiği rahatlama neden sorunlu?",o:["Geçicidir ve görev daha itici hale gelir","Hiç rahatlatmaz","Uykuyu bozar","Sadece çocuklarda görülür"],a:0},
+{q:"Yakın ve uzak ödüller hakkında ne söyleniyor?",o:["Uzak ödüller daha değerli bulunur","Yakın ödüller daha değerli bulunur","İkisi eşit değerli bulunur","Ödüllerin ertelemeyle ilgisi yoktur"],a:1},
+{q:"Metne göre başlama eşiğini ne düşürür?",o:["Görevi küçük bir ilk adıma indirmek","Daha uzun bir yapılacaklar listesi","Görevi sona bırakmak","Kendini sert biçimde eleştirmek"],a:0}],
+scan:[
+{q:"Kendine anlayış göstermeyle ilgili bulgular nasıl tanımlanıyor?",o:["Kesin","Henüz sınırlı","Tamamen çürütülmüş","Yalnızca hayvanlarda geçerli"],a:1},
+{q:"İlk adım örneğinde ne deniyor?",o:["Sadece dosyayı açacağım","Bugün bitireceğim","Yarın başlayacağım","Bir saat çalışacağım"],a:0}]},
+
+{id:"tr-konu-epigenetik",lang:"tr",genre:"Epigenetik",title:"Aynı genler, farklı hayatlar",blocks:[
+{p:"Bir arı kovanındaki kraliçe ile işçi arılar genetik olarak birbirine çok benzer. Yine de kraliçe çok daha büyüktür, yıllarca yaşayabilir ve yumurta bırakır; işçiler ise kısa ömürlüdür. Aradaki farkın önemli bir kısmı, larvalıkta nasıl beslendikleriyle ilgilidir: kraliçe olacak larva uzun süre arı sütüyle beslenir. Bu örnek, epigenetiğin temel sorusunu özetler: aynı DNA nasıl bu kadar farklı sonuçlar üretebilir?"},
+{h:"Genlerin açılıp kapanması"},
+{p:"Epigenetik, DNA dizisi değişmeden genlerden hangisinin, ne zaman ve ne kadar çalışacağını etkileyen mekanizmaları inceler. En iyi bilinen mekanizmalardan biri DNA metilasyonudur: DNA’ya bağlanan küçük kimyasal gruplar, bir genin okunmasını genellikle zorlaştırır. Bir diğeri, DNA’nın etrafına sarıldığı histon proteinlerindeki değişikliklerdir; bunlar DNA’nın ne kadar sıkı paketlendiğini, dolayısıyla ne kadar erişilebilir olduğunu etkiler."},
+{h:"Çevrenin izi"},
+{p:"Bu mekanizmalar beslenme, stres ve başka çevresel etkenlerden etkilenebilir. İkinci Dünya Savaşı sırasında Hollanda’da yaşanan kıtlık sonrasında yapılan araştırmalar, anne karnındayken kıtlığa maruz kalan kişilerde yıllar sonra bazı sağlık farklılıkları ve epigenetik farklılıklar bulmuştur."},
+{h:"Dikkat edilmesi gereken"},
+{p:"Epigenetik popüler kültürde sık sık abartılıyor. Bazı epigenetik izlerin nesiller boyu aktarılıp aktarılmadığı, özellikle insanlarda, hâlâ tartışmalı. “Düşüncelerinle genlerini değiştirebilirsin” gibi iddialar ise bilimsel bulguların çok ötesine geçiyor."}],
+q:[
+{q:"Metnin ana fikri hangisi?",o:["Epigenetik, DNA değişmeden genlerin çalışmasını etkileyen mekanizmaları inceler","Epigenetik, DNA dizisini değiştirmenin yoludur","Kraliçe arılar ayrı bir türdür","Düşünceler genleri doğrudan değiştirir"],a:0},
+{q:"Kraliçe arı ile işçi arı arasındaki farkın önemli bir nedeni ne?",o:["Farklı DNA dizileri","Larvalıktaki beslenme","Kovanın sıcaklığı","Yaşları"],a:1},
+{q:"DNA metilasyonu genellikle ne yapar?",o:["Genin okunmasını zorlaştırır","DNA dizisini değiştirir","Hücreyi böler","Histonları yok eder"],a:0},
+{q:"Epigenetik izlerin nesiller boyu aktarılması konusunda metin ne diyor?",o:["Kesin olarak kanıtlanmıştır","İnsanlarda hâlâ tartışmalıdır","İmkânsızdır","Sadece bitkilerde görülür"],a:1}],
+scan:[
+{q:"Kıtlık hangi ülkede yaşanmıştı?",o:["Belçika","Hollanda","Polonya","Norveç"],a:1},
+{q:"Kraliçe olacak larva neyle beslenir?",o:["Bal","Arı sütü","Polen","Nektar"],a:1}]},
+
+{id:"tr-konu-capalama",lang:"tr",genre:"Bilişsel önyargı",title:"Kafamıza takılan ilk sayı: çapalama etkisi",blocks:[
+{p:"Bir ürünün etiketinde önce yüksek bir “eski fiyat”, ardından indirimli fiyat gördüğünüzde, indirimli fiyat size ucuz gelir. Oysa o ürünün gerçekte ne kadar etmesi gerektiğini hiç düşünmemiş olabilirsiniz. Bu durum, bilişsel önyargılar arasında en çok çalışılanlardan biri olan çapalama etkisinin günlük bir örneğidir."},
+{h:"Nasıl çalışır?"},
+{p:"Belirsiz bir sayıyı tahmin etmemiz gerektiğinde, karşılaştığımız ilk sayıyı bir başlangıç noktası olarak kullanırız ve oradan yeterince uzaklaşamayız. Tversky ve Kahneman’ın 1970’lerde yaptığı klasik bir deneyde katılımcılar rastgele belirlenmiş bir sayıyı gördükten sonra bir soru hakkında tahminde bulundu. Konuyla hiçbir ilgisi olmayan bu sayı bile tahminleri etkiledi: yüksek sayı görenler daha yüksek tahminlerde bulundu."},
+{h:"Nerelerde karşımıza çıkar?"},
+{p:"Pazarlıkta ilk teklif, maaş görüşmelerinde ilk konuşulan rakam, hatta bir projenin süresine dair ilk tahmin çapa görevi görebilir. Uzmanların da bu etkiden tamamen kurtulamadığını gösteren çalışmalar var."},
+{h:"Ne yapılabilir?"},
+{p:"Çapalamayı tamamen ortadan kaldırmak zor, ama etkisini azaltmanın birkaç yolu var: bir sayıyla karşılaşmadan önce kendi tahminini yazmak, verilen sayının neden yanlış olabileceğine dair gerekçeler düşünmek ve mümkünse bağımsız bir referans aramak. Pazarlıkta ise ilk teklifi yapan taraf olmak, çapayı kendi lehine koymak anlamına gelebilir."}],
+q:[
+{q:"Metnin ana fikri hangisi?",o:["İlk karşılaşılan sayı sonraki tahminleri etkiler ve bu etki azaltılabilir","İndirimler her zaman sahtedir","Uzmanlar önyargılardan etkilenmez","Rastgele sayılar tahminleri etkilemez"],a:0},
+{q:"Klasik deneyde yüksek sayı görenler ne yaptı?",o:["Daha düşük tahminde bulundu","Daha yüksek tahminde bulundu","Tahmin yapmadı","Doğru tahminde bulundu"],a:1},
+{q:"Uzmanlar hakkında metin ne söylüyor?",o:["Tamamen bağışıktırlar","Bu etkiden tamamen kurtulamayabilirler","Daha fazla etkilenirler","Hiç çalışılmamışlardır"],a:1},
+{q:"Çapalamanın etkisini azaltmanın yollarından biri hangisi?",o:["Sayıyı görmeden önce kendi tahminini yazmak","İlk sayıyı kabul etmek","Daha hızlı karar vermek","Tahmin yapmaktan kaçınmak"],a:0}],
+scan:[
+{q:"Klasik deneyi kimler yaptı?",o:["Tversky ve Kahneman","Heath kardeşler","Roediger ve McDaniel","Klein ve Duke"],a:0},
+{q:"Deney hangi on yılda yapıldı?",o:["1950’ler","1970’ler","1990’lar","2010’lar"],a:1}]},
+
+{id:"tr-konu-dogrulama",lang:"tr",genre:"Bilişsel önyargı",title:"Haklı çıkmak istediğimizde: doğrulama yanlılığı",blocks:[
+{p:"Bir konuda fikrimizi oluşturduktan sonra, o fikri destekleyen bilgileri fark etmeye, hatırlamaya ve önemsemeye daha yatkın oluruz. Çelişen bilgileri ise ya görmeyiz ya da kolayca küçümseriz. Psikologlar bu eğilime doğrulama yanlılığı diyor."},
+{h:"Bir bulmaca"},
+{p:"Bu eğilimi gösteren ünlü bir düşünce deneyi şöyle: Önünüzde dört kart var. Her kartın bir yüzünde harf, diğer yüzünde sayı bulunuyor. Görünen yüzler A, K, 4 ve 7. Kural şu: “Bir kartın bir yüzünde sesli harf varsa, diğer yüzünde çift sayı vardır.” Kuralı test etmek için hangi kartları çevirmeniz gerekir? İnsanların çoğu A ve 4’ü seçer. Doğru cevap ise A ve 7’dir. 4’ün arkasında ne olursa olsun kural bozulmaz; ama 7’nin arkasından sesli bir harf çıkarsa kural çöker. Yani kuralı doğrulayacak kartları değil, çürütebilecek kartları aramak gerekir."},
+{h:"Günlük hayatta"},
+{p:"Bir yatırım kararı verdikten sonra yalnızca o yatırımı öven haberleri okumak, bir kişi hakkındaki ilk izlenimimizi doğrulayan davranışlarını hatırlamak ya da arama motoruna sorumuzu cevabı ima eden bir biçimde yazmak bu yanlılığın örnekleridir."},
+{h:"Karşı strateji"},
+{p:"Etkili bir yöntem, bilinçli olarak “Yanılıyorsam bunu bana ne gösterir?” diye sormaktır. Fikrinizin karşısındaki en güçlü argümanı, karşı tarafın da kabul edeceği biçimde yazmayı denemek de işe yarar. Bu, fikrinizi değiştirmek zorunda olduğunuz anlamına gelmez; yalnızca kararınızın daha sağlam bir temele oturmasını sağlar."}],
+q:[
+{q:"Metnin ana fikri hangisi?",o:["İnsanlar fikirlerini destekleyen bilgiyi arar; çürütücü bilgiyi aramak kararı sağlamlaştırır","Kart oyunları zekâyı ölçer","Yatırım haberleri güvenilmezdir","İlk izlenimler her zaman doğrudur"],a:0},
+{q:"Kart bulmacasında doğru cevap hangisi?",o:["A ve 4","A ve 7","K ve 4","Hepsi"],a:1},
+{q:"4 yazan kartı çevirmek neden gereksiz?",o:["Arkasında ne olursa olsun kural bozulmaz","Arkası boştur","Kural sayılarla ilgili değildir","Çift sayılar sayılmaz"],a:0},
+{q:"Önerilen karşı strateji hangisi?",o:["“Yanılıyorsam bunu ne gösterir?” diye sormak","Sadece uzmanları dinlemek","Kararları ertelemek","Hiç fikir oluşturmamak"],a:0}],
+scan:[
+{q:"Kartların görünen yüzleri hangileri?",o:["A, B, 2, 3","A, K, 4, 7","E, K, 4, 7","A, K, 2, 9"],a:1},
+{q:"Kurala göre sesli harfin arkasında ne olmalı?",o:["Tek sayı","Çift sayı","Başka bir harf","Sıfır"],a:1}]},
+
+{id:"tr-konu-metabilis",lang:"tr",genre:"Metabiliş",title:"Öğrendiğini sanmak ile öğrenmek",blocks:[
+{p:"Metabiliş, kendi düşünme ve öğrenme süreçlerimiz hakkındaki farkındalığımızdır: neyi bildiğimizi, neyi bilmediğimizi ve nasıl daha iyi öğreneceğimizi değerlendirme becerisi. Sorun şu ki bu değerlendirmeler sık sık yanılır."},
+{h:"Akıcılık yanılsaması"},
+{p:"Bir ders notunu ikinci, üçüncü kez okuduğumuzda metin giderek tanıdık gelir ve kolay okunur. Bu tanıdıklık hissini kolayca “bunu biliyorum” diye yorumlarız. Oysa bir şeyi tanımak ile onu hatırlayıp kullanabilmek farklı becerilerdir. Araştırmacılar bu duruma akıcılık yanılsaması diyor."},
+{h:"Kendini test etmek"},
+{p:"Bellek araştırmalarındaki en sağlam bulgulardan biri, bilgiyi hatırlamaya çalışmanın, yani kendini test etmenin, yalnızca tekrar okumaktan daha kalıcı öğrenme sağlamasıdır. İlginç olan, öğrencilerin çoğunun bunun tersine inanmasıdır: tekrar okumak daha rahat olduğu için daha etkili gibi gelir. Kendini test etmek zahmetlidir ve hatalar yaparız; ama bu zorluk öğrenmenin bir parçasıdır. Bazı araştırmacılar buna “istenen zorluklar” diyor."},
+{h:"Pratik bir alışkanlık"},
+{p:"Bir bölümü okuduktan sonra kitabı kapatıp ana fikirleri kendi kelimelerinle yazmak ya da birine anlatmaya çalışmak, hem öğrenmeyi güçlendirir hem de gerçekte neyi bilmediğini gösterir. Bu yüzden iyi öğrenenler genellikle en çok çalışanlar değil, ne zaman bilmediklerini fark edebilenlerdir."}],
+q:[
+{q:"Metnin ana fikri hangisi?",o:["Tanıdıklık hissi yanıltıcıdır; kendini test etmek hem öğretir hem eksikleri gösterir","Tekrar okumak en etkili öğrenme yöntemidir","Metabiliş yalnızca çocuklarda gelişir","Hata yapmak öğrenmeyi engeller"],a:0},
+{q:"Akıcılık yanılsaması nedir?",o:["Tanıdıklık hissini bilmek sanmak","Hızlı konuşma becerisi","Metni ezberlemek","Okurken dalıp gitmek"],a:0},
+{q:"Öğrencilerin çoğu neye inanıyor?",o:["Kendini test etmenin daha etkili olduğuna","Tekrar okumanın daha etkili olduğuna","İkisinin aynı olduğuna","Hiçbirinin işe yaramadığına"],a:1},
+{q:"Metne göre iyi öğrenenler kimler?",o:["En çok çalışanlar","Ne zaman bilmediklerini fark edebilenler","En hızlı okuyanlar","Hiç hata yapmayanlar"],a:1}],
+scan:[
+{q:"Kendini test etmenin zorluğu için kullanılan ifade ne?",o:["İstenen zorluklar","Akıllı hatalar","Öğrenme duvarı","Bilişsel yük"],a:0},
+{q:"Önerilen alışkanlıkta bölüm okunduktan sonra ne yapılıyor?",o:["Kitap kapatılıp ana fikirler yazılıyor","Bölüm tekrar okunuyor","Önemli yerlerin altı çiziliyor","Ertesi güne bırakılıyor"],a:0}]},
+
+{id:"tr-konu-karar",lang:"tr",genre:"Karar verme",title:"Kötü sonuç, kötü karar mıdır?",blocks:[
+{p:"Karar araştırmacıları sık sık aynı uyarıyı yapar: bir kararın kalitesini sonucuna bakarak değerlendirmek yanıltıcıdır. Kırmızı ışıkta geçip kaza yapmadan eve varan biri iyi bir karar vermiş sayılmaz; yalnızca şanslıdır. Tersine, iyi düşünülmüş bir yatırım da şanssızlık yüzünden kaybettirebilir."},
+{h:"Sonuca göre yargılamak"},
+{p:"Eski profesyonel poker oyuncusu Annie Duke bu hataya İngilizcede “resulting” adını veriyor: sonucu iyi olan kararı iyi, kötü olanı kötü saymak. Bu eğilim, belirsizliğin yüksek olduğu her alanda, iş hayatından ebeveynliğe kadar, yanlış dersler çıkarmamıza neden olur. Şanslı bir başarıdan sonra riskli davranışı tekrarlarız; iyi bir karar şanssız sonuçlanınca da doğru yöntemi bırakırız."},
+{h:"Kararı ve sonucu ayrı değerlendirmek"},
+{p:"Daha sağlıklı bir yaklaşım şunları sormaktır: Karar anında hangi bilgilere sahiptim? Hangi seçenekleri değerlendirdim? Olası sonuçları ve olasılıklarını nasıl tahmin ettim? Bu soruların cevabı iyiyse, sonuç kötü olsa bile karar iyi olabilir."},
+{h:"Ölüm sonrası değil, ölüm öncesi"},
+{p:"Psikolog Gary Klein’ın önerdiği “ölüm öncesi analiz” (premortem) yöntemi de burada işe yarar. Karar uygulanmadan önce ekip, projenin bir yıl sonra tamamen başarısız olduğunu hayal eder ve bunun nedenlerini yazar. Bu, insanların normalde dile getirmekten çekindiği riskleri görünür kılar."}],
+q:[
+{q:"Metnin ana fikri hangisi?",o:["Kararın kalitesi sonucuna göre değil, karar anındaki sürece göre değerlendirilmeli","Kırmızı ışıkta geçmek bazen güvenlidir","Poker en iyi karar egzersizidir","Kötü sonuçlar her zaman kötü kararlardan kaynaklanır"],a:0},
+{q:"Kırmızı ışık örneği neyi gösteriyor?",o:["İyi sonucun iyi karar anlamına gelmediğini","Trafik kurallarının gereksizliğini","Şansın önemsiz olduğunu","Hızlı karar vermenin faydasını"],a:0},
+{q:"Sonuca göre yargılamanın bir zararı ne?",o:["Şanslı bir başarıdan sonra riskli davranışı tekrarlamak","Daha fazla bilgi toplamak","Karar vermeyi hızlandırmak","Ekip uyumunu artırmak"],a:0},
+{q:"Ölüm öncesi analizde ekip ne hayal eder?",o:["Projenin büyük başarısını","Projenin bir yıl sonra başarısız olduğunu","Rakiplerin planlarını","Bütçenin iki katına çıktığını"],a:1}],
+scan:[
+{q:"Ölüm öncesi analiz yöntemini kim önermiş?",o:["Annie Duke","Gary Klein","Daniel Kahneman","Chip Heath"],a:1},
+{q:"Sonuca göre yargılama hatasının İngilizce adı ne?",o:["Anchoring","Resulting","Framing","Priming"],a:1}]},
+
+{id:"tr-konu-bilesik",lang:"tr",genre:"Finansal okuryazarlık",title:"Paranın zamanla büyümesi: bileşik getiri",blocks:[
+{p:"1000 lirayı yıllık yüzde 10 getiriyle 10 yıl boyunca değerlendirdiğinizi düşünün. Getiriyi her yıl çekip harcarsanız, 10 yılın sonunda ana paranızla birlikte toplam 2000 lira elde etmiş olursunuz. Getiriyi çekmeyip ana paraya eklerseniz ise yaklaşık 2594 liraya ulaşırsınız. Aradaki farkın nedeni bileşik getiridir: getiri yalnızca ana paradan değil, daha önce kazanılan getiriden de elde edilir."},
+{h:"Zaman en önemli değişken"},
+{p:"Bileşik getirinin etkisi ilk yıllarda küçük görünür ve zamanla hızlanır. Bu yüzden erken başlamak, çoğu zaman daha büyük miktarlarla geç başlamaktan daha etkilidir. Kabaca bir hesap için “72 kuralı” kullanılabilir: 72’yi yıllık getiri oranına bölmek, paranın yaklaşık kaç yılda ikiye katlanacağını verir. Yüzde 10 getiride bu yaklaşık 7 yıldır."},
+{h:"Aynı kural borçta da işler"},
+{p:"Bileşik etki yalnızca birikimde değil, borçta da çalışır. Ödenmeyen kredi kartı borcuna eklenen faizin de faizi işler ve borç beklenenden hızlı büyür. Bu nedenle yüksek faizli bir borcu kapatmak, çoğu zaman bulunabilecek en iyi “yatırımlardan” biridir."},
+{h:"Enflasyonu unutmamak"},
+{p:"Getiriyi değerlendirirken enflasyonu da hesaba katmak gerekir. Paranız yılda yüzde 10 büyüyorsa ama fiyatlar da yüzde 10 artıyorsa, alım gücünüz neredeyse hiç değişmemiştir. Gerçek getiri, kabaca nominal getiri ile enflasyon arasındaki farktır. Enflasyonun yüksek olduğu ülkelerde bu ayrım özellikle önemlidir."}],
+q:[
+{q:"Metnin ana fikri hangisi?",o:["Getirinin de getirisi kazanılır; bu etki zamanla büyür ve borçta da işler","Para biriktirmek anlamsızdır","Enflasyon getiriyi etkilemez","72 kuralı kesin bir hesaplamadır"],a:0},
+{q:"Getiriyi her yıl çekerseniz 10 yılın sonunda toplam ne kadar elde edersiniz?",o:["1000 lira","2000 lira","2594 lira","3000 lira"],a:1},
+{q:"Bileşik etki borçta nasıl çalışır?",o:["Faizin de faizi işler","Borç sabit kalır","Faiz zamanla azalır","Borç kendiliğinden kapanır"],a:0},
+{q:"Gerçek getiri kabaca nasıl hesaplanır?",o:["Nominal getiri ile enflasyonun toplamı","Nominal getiri ile enflasyon arasındaki fark","Getirinin ikiye bölünmesi","72’nin enflasyona bölünmesi"],a:1}],
+scan:[
+{q:"Getiri ana paraya eklenirse 10 yıl sonunda yaklaşık ne kadar olur?",o:["2000 lira","2594 lira","2200 lira","1100 lira"],a:1},
+{q:"Yüzde 10 getiride para yaklaşık kaç yılda ikiye katlanır?",o:["5","7","10","14"],a:1}]},
+
+{id:"tr-konu-harclik",lang:"tr",genre:"Finansal okuryazarlık",title:"Harçlık bir maaş mı, bir ders mi?",blocks:[
+{p:"Çocuklara harçlık verip vermemek, verilecekse nasıl verileceği aileler arasında sık tartışılan bir konudur. Yaygın yaklaşımlardan biri, harçlığı ev işlerine bağlamaktır: bulaşığı yerleştiren çocuk para kazanır. Bu yaklaşım ilk bakışta çalışma ahlakı öğretiyor gibi görünür."},
+{h:"Ev işlerini paraya bağlamanın riski"},
+{p:"Bazı finansal eğitim yazarları bu bağlantıya karşı çıkıyor. Gerekçeleri şu: ev işleri ailenin bir üyesi olmanın gereğidir ve para karşılığı yapılan bir iş olarak sunulursa çocuk bir gün “Bu hafta paraya ihtiyacım yok, o halde odamı da toplamam” diyebilir. Bu yazarlara göre harçlık bir ücret değil, para yönetimini deneyerek öğrenmenin aracıdır."},
+{h:"Harçlıkla ne öğrenilir?"},
+{p:"Düzenli bir harçlık, çocuğun sınırlı bir bütçeyle seçim yapmasını sağlar. Bir oyuncak için birkaç hafta biriktirmek, beklemenin ve önceliklendirmenin somut bir deneyimidir. Önerilen yaygın yöntemlerden biri, harçlığı harcama, biriktirme ve paylaşma gibi birkaç kavanoza ayırmaktır."},
+{h:"Hata yapmaya izin vermek"},
+{p:"Bu yaklaşımın belki de en önemli parçası, çocuğun küçük paralarla hata yapmasına izin vermektir. Harçlığının tamamını ilk gün harcayıp hafta sonunda istediği şeyi alamayan çocuk, bu dersi yetişkinlikte çok daha büyük paralarla öğrenmek zorunda kalmaz. Ebeveynin rolü, kararı onun yerine vermek değil, sonrasında birlikte ne olduğunu konuşmaktır."}],
+q:[
+{q:"Metnin ana fikri hangisi?",o:["Harçlık, para yönetimini deneyerek öğrenmenin aracı olarak görülebilir","Çocuklara hiç harçlık verilmemeli","Ev işleri mutlaka paraya bağlanmalı","Çocuklar parayla ilgili hata yapmamalı"],a:0},
+{q:"Ev işlerini paraya bağlamanın riski ne?",o:["Çocuk paraya ihtiyacı olmadığında işi yapmayı reddedebilir","Çocuk çok fazla para biriktirir","Ev işleri daha iyi yapılır","Harçlık azalır"],a:0},
+{q:"Biriktirmek çocuğa hangi deneyimi sağlar?",o:["Beklemek ve önceliklendirmek","Borç almak","Yatırım yapmak","Vergi ödemek"],a:0},
+{q:"Metne göre ebeveynin rolü ne?",o:["Kararı çocuğun yerine vermek","Sonrasında birlikte ne olduğunu konuşmak","Harcamaları yasaklamak","Kaybedilen parayı geri vermek"],a:1}],
+scan:[
+{q:"Kavanoz yönteminde hangi kategoriler sayılıyor?",o:["Harcama, biriktirme, paylaşma","Okul, oyun, yemek","Gelir, gider, vergi","Bugün, yarın, gelecek"],a:0},
+{q:"Örnekteki ev işi neydi?",o:["Odayı toplamak","Bulaşığı yerleştirmek","Çöpü çıkarmak","Köpeği gezdirmek"],a:1}]},
+
+{id:"tr-konu-noroplastisite",lang:"tr",genre:"Nöroplastisite",title:"Değişen beyin",blocks:[
+{p:"Uzun süre beynin yetişkinlikte büyük ölçüde sabit bir yapı olduğu düşünüldü. Bugün ise beynin yaşam boyu deneyimlerle değiştiğini biliyoruz. Bu özelliğe nöroplastisite deniyor."},
+{h:"Bağlantıların güçlenmesi"},
+{p:"Plastisitenin temelinde nöronlar arasındaki bağlantıların, yani sinapsların, kullanımla güçlenmesi ya da zayıflaması yatar. Birlikte sık sık etkinleşen nöronlar arasındaki bağlantı güçlenir. Bu fikir psikolog Donald Hebb tarafından 1949’da ortaya atıldı. Bir beceriyi tekrar tekrar çalıştığımızda ilgili bağlantılar daha verimli hale gelir; kullanmadığımız bağlantılar ise zamanla zayıflayabilir."},
+{h:"Londra taksicileri"},
+{p:"Plastisiteyle ilgili en çok anılan çalışmalardan biri Londra taksi şoförleriyle yapıldı. Şehrin karmaşık sokak ağını ezberlemek zorunda olan şoförlerde, mekânsal bellekle ilişkili bir beyin bölgesi olan hipokampusun arka kısmının karşılaştırma grubuna göre daha büyük olduğu bulundu. Sonraki çalışmalar, bu farkın eğitim sürecinde ortaya çıktığı görüşünü destekledi."},
+{h:"Sınırlar"},
+{p:"Plastisite “beyin her şeyi yapabilir” anlamına gelmez. Bazı yeteneklerin gelişmesi için daha elverişli dönemler vardır ve yaş ilerledikçe değişim genellikle yavaşlar. Yetişkin beyninde yeni nöron üretiminin ne ölçüde gerçekleştiği de araştırmacılar arasında hâlâ tartışmalıdır. Yine de temel mesaj güçlüdür: düzenli ve zorlayıcı pratik beyni gerçekten değiştirir."}],
+q:[
+{q:"Metnin ana fikri hangisi?",o:["Beyin yaşam boyu deneyimle değişir ama bu değişimin sınırları vardır","Yetişkin beyni hiç değişmez","Beyin her yaşta her şeyi aynı hızla öğrenir","Taksi şoförleri daha zekidir"],a:0},
+{q:"Birlikte sık etkinleşen nöronlar arasında ne olur?",o:["Bağlantı zayıflar","Bağlantı güçlenir","Nöronlar ölür","Hiçbir şey değişmez"],a:1},
+{q:"Taksi şoförlerinde hangi bölge daha büyük bulundu?",o:["Hipokampusun arka kısmı","Beyincik","Görme korteksi","Beyin sapı"],a:0},
+{q:"Yetişkinlerde yeni nöron üretimi konusunda metin ne diyor?",o:["Kesin olarak yoktur","Hâlâ tartışmalıdır","Çocuklardakinden fazladır","Sadece uykuda olur"],a:1}],
+scan:[
+{q:"Hebb bu fikri hangi yıl ortaya attı?",o:["1929","1949","1969","1989"],a:1},
+{q:"Taksicilerin ezberlemesi gereken neydi?",o:["Şehrin sokak ağı","Müşteri isimleri","Tarifeler","Trafik işaretleri"],a:0}]},
+
+{id:"tr-konu-bogazlar",lang:"tr",genre:"Jeopolitik",title:"Haritanın sınırladığı seçimler: Türk Boğazları",blocks:[
+{p:"Jeopolitik, coğrafyanın devletlerin gücünü, çıkarlarını ve seçeneklerini nasıl şekillendirdiğini inceler. Dağlar, nehirler, limanlar ve dar deniz geçitleri, liderlerin tercihlerinden çok daha kalıcıdır ve bu tercihlerin sınırlarını çizer."},
+{h:"Dar geçitlerin önemi"},
+{p:"Dünya ticaretinin önemli bir kısmı birkaç dar deniz geçidinden geçer. Bu geçitleri kontrol eden ya da onlara yakın olan ülkeler, kendi büyüklüklerinin üzerinde bir stratejik öneme sahip olur. İstanbul ve Çanakkale boğazlarından oluşan Türk Boğazları bunun klasik bir örneğidir: Karadeniz’i Akdeniz’e bağlayan tek deniz yoludur."},
+{h:"Montrö Sözleşmesi"},
+{p:"Boğazlardan geçiş, 1936’da imzalanan Montrö Sözleşmesi ile düzenlenir. Sözleşme barış zamanında ticari gemilere geçiş serbestliği tanırken savaş gemilerinin geçişine çeşitli sınırlamalar getirir. Karadeniz’e kıyısı olmayan ülkelerin savaş gemileri için tonaj ve kalış süresi kısıtlamaları bulunur. Bu düzenleme onlarca yıldır Karadeniz’deki güç dengesini etkileyen önemli bir unsur olmuştur."},
+{h:"Coğrafya kader mi?"},
+{p:"Coğrafyanın belirleyici olduğu fikri eleştirilere de açıktır. Teknoloji, ekonomi ve ittifaklar coğrafyanın etkisini değiştirebilir; örneğin hava gücü ve küresel ticaret ağları eski sınırlamaların bir kısmını aşmıştır. Yine de bir ülkenin dış politikasını anlamaya çalışırken haritaya bakmak çoğu zaman en iyi başlangıç noktasıdır."}],
+q:[
+{q:"Metnin ana fikri hangisi?",o:["Coğrafya, özellikle dar geçitler, devletlerin seçeneklerini şekillendirir ama tek belirleyici değildir","Türk Boğazları önemini yitirmiştir","Coğrafya her şeyi belirler","Montrö Sözleşmesi ticari gemileri yasaklar"],a:0},
+{q:"Türk Boğazları neyi neye bağlar?",o:["Karadeniz’i Akdeniz’e","Ege’yi Kızıldeniz’e","Hazar’ı Karadeniz’e","Marmara’yı Atlas Okyanusu’na"],a:0},
+{q:"Montrö Sözleşmesi barış zamanında ticari gemilere ne tanır?",o:["Geçiş serbestliği","Tam yasak","Sadece gece geçiş hakkı","Ücretsiz yakıt"],a:0},
+{q:"Metne göre coğrafyanın etkisini ne değiştirebilir?",o:["Teknoloji, ekonomi ve ittifaklar","Sadece iklim","Hiçbir şey","Nüfus artışı"],a:0}],
+scan:[
+{q:"Montrö Sözleşmesi hangi yıl imzalandı?",o:["1923","1936","1945","1952"],a:1},
+{q:"Tonaj ve kalış süresi kısıtlamaları hangi ülkelerin savaş gemileri için geçerli?",o:["Karadeniz’e kıyısı olmayan ülkelerin","Akdeniz’e kıyısı olan ülkelerin","Tüm NATO üyelerinin","Sadece Türkiye’nin"],a:0}]}
+);
+
+/* ---------- English topic texts (explanatory, written for this app) ---------- */
+TEXTS.push(
+{id:"en-topic-ifthen",lang:"en",genre:"Procrastination",title:"If-then plans: a small trick for getting started",blocks:[
+{p:"Intentions are cheap. Most people who procrastinate already know what they should do and fully intend to do it. The gap is not in knowing but in starting at the right moment. One of the better-supported tools for closing that gap is what psychologist Peter Gollwitzer called implementation intentions, often described simply as if-then plans."},
+{h:"What an if-then plan looks like"},
+{p:"A goal intention says what you want: “I will exercise more.” An if-then plan adds when, where and how: “If it is 7 a.m. on a weekday, then I will put on my running shoes and walk out the door.” The plan links a specific situation to a specific action, so that when the situation arrives, the decision has already been made."},
+{h:"Why it helps"},
+{p:"Every decision to start a task is a small negotiation with yourself, and procrastination tends to win those negotiations when we are tired or the task feels unpleasant. An if-then plan removes the negotiation. Studies in many areas, from health habits to studying, have found that people who form such plans follow through more often than people who only set goals, although the size of the effect varies between studies."},
+{h:"How to use it well"},
+{p:"The situation in the “if” part should be easy to notice, such as a time, a place or something you already do every day. The action should be small and concrete. It also helps to plan for obstacles: “If I feel like checking my phone before I start, then I will put it in another room.”"}],
+q:[
+{q:"What is the main idea of the text?",o:["Linking a specific situation to a specific action helps people start tasks","Procrastinators don’t know what they should do","Goals are more effective than plans","Exercise is the best cure for procrastination"],a:0},
+{q:"According to the text, where is the gap for most procrastinators?",o:["In knowing what to do","In starting at the right moment","In setting goals","In having enough time"],a:1},
+{q:"Why do if-then plans help?",o:["They remove the negotiation with yourself","They make tasks shorter","They add rewards","They involve other people"],a:0},
+{q:"What does the text say about the size of the effect?",o:["It is always large","It varies between studies","It has never been measured","It is negative"],a:1}],
+scan:[
+{q:"Who introduced the term implementation intentions?",o:["Peter Gollwitzer","Timothy Pychyl","Daniel Kahneman","Gary Klein"],a:0},
+{q:"In the example plan, at what time does the person go running?",o:["6 a.m.","7 a.m.","8 a.m.","7 p.m."],a:1}]},
+
+{id:"en-topic-agouti",lang:"en",genre:"Epigenetics",title:"A mouse, a diet and a change of colour",blocks:[
+{p:"Some laboratory mice carry a version of a gene called agouti that, when it is active, gives them yellow fur and makes them prone to obesity. Mice with this gene variant can nevertheless look very different from one another, ranging from yellow to brown, depending on how strongly the gene is switched on."},
+{h:"The experiment"},
+{p:"In a well-known study published in 2003, researchers fed pregnant mice of this type a diet rich in so-called methyl donors, nutrients such as folic acid and vitamin B12. Their offspring were more likely to have brown fur and a healthier weight than the offspring of mothers on a normal diet. The DNA sequence of the pups was the same; what changed was the level of DNA methylation near the gene, which kept it quieter."},
+{h:"Why it became famous"},
+{p:"The study offered a vivid picture of how a mother’s environment can shape the way her offspring’s genes are used. It is often cited when people explain epigenetics to a general audience."},
+{h:"What it does and does not show"},
+{p:"The result concerns one gene in a particular strain of mice, chosen because its epigenetic state is unusually sensitive. It does not mean that human diets during pregnancy produce the same kind of dramatic effects, and later research suggests the picture is more complicated than the original story. It is best seen as a proof of principle rather than a guide to human nutrition."}],
+q:[
+{q:"What is the main idea of the text?",o:["The mouse study shows diet can change gene activity via methylation, but it has limits","Mouse fur colour depends only on DNA sequence","Pregnant women should take vitamin B12","Epigenetic effects are always large in humans"],a:0},
+{q:"What did the methyl-donor diet change in the offspring?",o:["Their DNA sequence","DNA methylation near the gene","The number of pups","Only their lifespan"],a:1},
+{q:"Why was this strain of mice chosen?",o:["It is cheap","Its epigenetic state is unusually sensitive","It has no fur","It lives long"],a:1},
+{q:"How does the text suggest we view the study?",o:["As a guide to human nutrition","As a proof of principle","As a failed experiment","As proof that genes don’t matter"],a:1}],
+scan:[
+{q:"In which year was the study published?",o:["1993","2003","2013","1983"],a:1},
+{q:"Which nutrients are given as examples of methyl donors?",o:["Iron and zinc","Folic acid and vitamin B12","Vitamins C and D","Calcium and magnesium"],a:1}]},
+
+{id:"en-topic-availability",lang:"en",genre:"Cognitive bias",title:"Easy to remember, easy to overestimate",blocks:[
+{p:"After news of a plane crash, many people feel more nervous about flying, even though for most travellers the car journey to the airport carries a higher risk than the flight itself. Psychologists explain this with the availability heuristic: we judge how likely something is by how easily examples come to mind."},
+{h:"A useful shortcut that misfires"},
+{p:"Most of the time, the shortcut works. Things that happen often are usually easier to remember. The trouble starts when something is easy to recall for other reasons: because it was dramatic, recent, emotional or widely reported. A single vivid story can outweigh dry statistics in our minds."},
+{h:"Where it shows up"},
+{p:"The availability heuristic affects which risks we worry about, which investments we consider safe after a period of good news, and even how we judge our own contributions. In one classic line of research, partners in couples were asked what share of household tasks they did; when their estimates were added up, they often came to more than 100 percent, partly because people remember their own efforts more easily than their partner’s."},
+{h:"Correcting for it"},
+{p:"A practical habit is to ask, “Am I thinking about this because it is common, or because it is memorable?” Looking for base rates, the overall frequency of an event, is the most direct correction. For personal judgments, deliberately listing what others have contributed can balance the picture."}],
+q:[
+{q:"What is the main idea of the text?",o:["We judge likelihood by how easily examples come to mind, which can mislead us","Flying is more dangerous than driving","Statistics are remembered better than stories","Couples always share tasks equally"],a:0},
+{q:"When does the availability shortcut misfire?",o:["When something is easy to recall for reasons other than frequency","When we use statistics","When events are rare and boring","When we are calm"],a:0},
+{q:"What happened when partners’ estimates were added up?",o:["They came to exactly 100 percent","They often came to more than 100 percent","They were far below 100 percent","They could not be measured"],a:1},
+{q:"What is described as the most direct correction?",o:["Watching more news","Looking for base rates","Avoiding decisions","Asking a partner"],a:1}],
+scan:[
+{q:"According to the text, what carries a higher risk for most travellers?",o:["The flight","The car journey to the airport","Airport security","The hotel stay"],a:1},
+{q:"What question does the text suggest asking yourself?",o:["Is this common, or just memorable?","Is this expensive?","Who told me this?","Will I regret this?"],a:0}]},
+
+{id:"en-topic-spacing",lang:"en",genre:"Metacognition",title:"Why cramming feels effective and isn’t",blocks:[
+{p:"The night before an exam, cramming can feel productive. The material is fresh, and after a few hours you may feel you know it well. Yet one of the oldest findings in memory research suggests that this feeling is misleading: information studied in several sessions spread over time is remembered much longer than the same amount of study packed into one session."},
+{h:"The spacing effect"},
+{p:"The effect was first described in the late nineteenth century by Hermann Ebbinghaus, who tested his own memory for lists of nonsense syllables. It has since been replicated in many settings, from vocabulary learning to medical training. Spacing seems to work partly because each new session requires us to retrieve material we have started to forget, and that effortful retrieval strengthens memory."},
+{h:"A metacognitive trap"},
+{p:"The problem is that our sense of how well we are learning points the wrong way. During massed study, performance rises quickly and we feel confident. During spaced study, we keep running into forgetting, which feels like failure. Learners therefore often judge cramming to be the better method, even when tests show the opposite."},
+{h:"Putting it into practice"},
+{p:"A simple approach is to plan short reviews of new material a day later, then a few days later, then a week or two later. Each review should involve recalling, not just rereading. If recall is hard, that is not a sign that the method is failing; it is the point where learning happens."}],
+q:[
+{q:"What is the main idea of the text?",o:["Spaced study beats cramming even though cramming feels more effective","Cramming is the best exam strategy","Ebbinghaus disproved the spacing effect","Rereading is the best form of review"],a:0},
+{q:"Why does spacing seem to work?",o:["Each session requires retrieving partly forgotten material","It takes less time","It prevents all forgetting","It is more enjoyable"],a:0},
+{q:"Why do learners often prefer cramming?",o:["It produces quick gains and confidence","Teachers recommend it","It is proven to work better","It requires no effort"],a:0},
+{q:"According to the text, what does difficult recall indicate?",o:["The method is failing","Learning is happening","You should stop","You need more rereading"],a:1}],
+scan:[
+{q:"Who first described the spacing effect?",o:["Hermann Ebbinghaus","William James","Jean Piaget","B. F. Skinner"],a:0},
+{q:"What did he use to test his memory?",o:["Lists of nonsense syllables","Poems","Phone numbers","Faces"],a:0}]},
+
+{id:"en-topic-wrap",lang:"en",genre:"Decision making",title:"Four steps against bad decisions",blocks:[
+{p:"In their book Decisive, Chip and Dan Heath argue that most bad decisions are caused not by a lack of intelligence but by a few predictable traps. They propose a four-step process, summarised by the letters WRAP, to counter them."},
+{h:"Widen your options"},
+{p:"Many decisions are framed as “whether or not”: whether to take the job, whether to buy the house. This narrow framing hides alternatives. Asking “What else could I do?” or imagining that the current options have disappeared can reveal choices that were invisible before."},
+{h:"Reality-test your assumptions"},
+{p:"Once we lean towards an option, we tend to seek information that supports it. The Heaths suggest looking for disconfirming evidence and, where possible, running small experiments before committing, such as working part-time in a new field before switching careers."},
+{h:"Attain distance before deciding"},
+{p:"Short-term emotions can distort choices. One technique they discuss is to ask how you will feel about the decision in ten minutes, ten months and ten years, or what you would advise a close friend to do in the same situation."},
+{h:"Prepare to be wrong"},
+{p:"Finally, people tend to be overconfident about how the future will unfold. Planning for both a bad and a very good outcome, and setting a “tripwire”, a point at which you will deliberately reconsider, helps avoid drifting into a failing course of action."}],
+q:[
+{q:"What is the main idea of the text?",o:["A four-step process can counter predictable traps in decision making","Bad decisions come from low intelligence","Whether-or-not questions lead to the best decisions","Emotions should always guide decisions"],a:0},
+{q:"What problem does whether-or-not framing create?",o:["It hides alternatives","It takes too long","It involves too many people","It costs money"],a:0},
+{q:"What is suggested before switching careers?",o:["Quitting immediately","Running a small experiment, such as part-time work","Asking only supporters","Waiting ten years"],a:1},
+{q:"What is a tripwire?",o:["A point at which you will deliberately reconsider","A legal contract","A type of investment","A reward for success"],a:0}],
+scan:[
+{q:"What do the letters WRAP stand for?",o:["Widen, Reality-test, Attain distance, Prepare to be wrong","Wait, Review, Act, Plan","Weigh, Reflect, Ask, Proceed","Widen, Reduce, Avoid, Prepare"],a:0},
+{q:"Which time frames are used in the distance technique?",o:["10 minutes, 10 months, 10 years","1 day, 1 week, 1 year","1 hour, 1 day, 1 month","5 minutes, 5 days, 5 years"],a:0}]},
+
+{id:"en-topic-oppcost",lang:"en",genre:"Financial literacy",title:"The hidden price tag: opportunity cost",blocks:[
+{p:"Every choice to spend money, time or attention on one thing is also a choice not to spend it on something else. Economists call the value of the best alternative you give up the opportunity cost. It rarely appears on a receipt, which is exactly why it is easy to ignore."},
+{h:"An everyday example"},
+{p:"Suppose a teenager has saved 3,000 lira and is choosing between a new phone and a course in a skill she wants to learn. The price of the phone is 3,000 lira, but its real cost is the course she will not take. Framed this way, the question changes from “Can I afford this?” to “Is this the best use of what I have?”"},
+{h:"Time counts too"},
+{p:"Opportunity cost applies to time as well as money. An hour spent scrolling through videos is an hour not spent sleeping, practising an instrument or meeting a friend. Because time cannot be saved up like money, some people find this version of the idea even more useful."},
+{h:"Teaching it to children"},
+{p:"One simple exercise is to ask children, before a purchase, to name one other thing they could do with the same money. They do not have to change their mind; the goal is to make the trade-off visible. Research on how much such exercises change long-term behaviour is limited, so they are best seen as a way of building awareness."}],
+q:[
+{q:"What is the main idea of the text?",o:["Every choice has a hidden cost: the best alternative you give up","Phones are a waste of money","Time is less valuable than money","Children should never spend their savings"],a:0},
+{q:"Why is opportunity cost easy to ignore?",o:["It rarely appears on a receipt","It is very small","It only applies to adults","It is hard to calculate exactly"],a:0},
+{q:"How does the question change when you think about opportunity cost?",o:["From “Can I afford this?” to “Is this the best use of what I have?”","From “Is this cheap?” to “Is this popular?”","From “Do I need this?” to “Do my friends have this?”","It does not change"],a:0},
+{q:"What does the text say about research on such exercises?",o:["It is extensive and conclusive","It is limited","It shows they are harmful","It does not exist"],a:1}],
+scan:[
+{q:"How much has the teenager saved?",o:["1,000 lira","3,000 lira","5,000 lira","300 lira"],a:1},
+{q:"What is the alternative to the phone in the example?",o:["A trip","A course","A bicycle","A concert"],a:1}]},
+
+{id:"en-topic-juggling",lang:"en",genre:"Neuroplasticity",title:"What juggling did to the brain",blocks:[
+{p:"Can learning a new physical skill as an adult visibly change the brain? A study published in 2004 set out to test this with a simple task: juggling."},
+{h:"The study"},
+{p:"Researchers scanned the brains of a group of adults who had never juggled. Half of them then spent three months learning a basic three-ball juggling routine; the other half did not. When the scans were repeated, the jugglers showed a temporary increase in grey matter in areas involved in processing visual motion. After a further three months without practice, the increase had partly reversed."},
+{h:"What it suggests"},
+{p:"The study became an often-cited example of experience-dependent plasticity in adults. It suggested that the adult brain changes structurally when we learn, and that some of these changes fade if the skill is not used. Later studies found similar effects in older adults, although the changes tended to be smaller."},
+{h:"A note of caution"},
+{p:"Brain scans of this kind measure average differences in groups, not what happens in a single person, and scientists still debate exactly which cellular changes such measurements reflect. The study does not mean that every new hobby will produce visible changes in a brain scan. Its more modest message is that the brain responds to practice, and that keeping a skill requires continuing to use it."}],
+q:[
+{q:"What is the main idea of the text?",o:["Learning to juggle changed adult brain structure, and the change partly faded without practice","Juggling makes people smarter","Adult brains cannot change","Brain scans show exactly what happens in each person"],a:0},
+{q:"Which brain areas showed an increase?",o:["Areas processing visual motion","Language areas","Areas for smell","The brain stem"],a:0},
+{q:"What happened after three months without practice?",o:["The increase grew","The increase partly reversed","Nothing changed","The jugglers completely forgot how to juggle"],a:1},
+{q:"What did later studies find in older adults?",o:["No change at all","Similar but smaller effects","Much larger effects","Negative effects"],a:1}],
+scan:[
+{q:"When was the study published?",o:["1994","2004","2014","1984"],a:1},
+{q:"How many balls were used in the routine?",o:["Two","Three","Four","Five"],a:1}]},
+
+{id:"en-topic-malacca",lang:"en",genre:"Geopolitics",title:"A narrow strait and a big worry",blocks:[
+{p:"Between the Malay Peninsula and the Indonesian island of Sumatra lies the Strait of Malacca, one of the busiest shipping lanes in the world. A large share of the trade between the Indian Ocean and East Asia, including much of the oil imported by China, Japan and South Korea, passes through it."},
+{h:"A chokepoint"},
+{p:"At its narrowest point, near Singapore, the navigable channel is only a few kilometres wide. Narrow passages like this are called chokepoints: if they were blocked by conflict, piracy or an accident, ships would have to take much longer routes, raising costs and delaying supplies. Chinese commentators have long discussed this vulnerability, sometimes calling it the “Malacca dilemma”."},
+{h:"Responses"},
+{p:"Countries that depend on such routes try to reduce their exposure. Strategies include building pipelines over land, developing alternative ports, keeping strategic oil reserves and expanding naval capabilities to protect shipping. Each of these options is expensive and only partly replaces the sea route."},
+{h:"Geography and choice"},
+{p:"The case shows a recurring theme in geopolitics: geography does not dictate what states do, but it shapes which problems they must solve. A country with secure access to open seas faces different choices from one whose trade must pass through a narrow strait it does not control. Situations like this change over time, so current details should be checked against recent sources."}],
+q:[
+{q:"What is the main idea of the text?",o:["Dependence on a narrow strait creates vulnerabilities that shape countries’ strategies","The Strait of Malacca is rarely used","Geography decides everything states do","Pipelines have fully replaced sea routes"],a:0},
+{q:"What is a chokepoint?",o:["A narrow passage whose blockage would force longer routes","A type of ship","A naval base","A trade agreement"],a:0},
+{q:"Which strategy is NOT mentioned for reducing exposure?",o:["Building pipelines","Keeping strategic oil reserves","Closing the strait","Expanding naval capabilities"],a:2},
+{q:"According to the text, what does geography do?",o:["Dictates what states do","Shapes which problems states must solve","Has no effect today","Only matters for small countries"],a:1}],
+scan:[
+{q:"Near which city is the strait at its narrowest?",o:["Jakarta","Singapore","Kuala Lumpur","Bangkok"],a:1},
+{q:"What term is used for China’s vulnerability?",o:["Malacca dilemma","Strait trap","Asian chokehold","Pacific problem"],a:0}]}
+);
+
+/* ---------- Attention check & parking ---------- */
+let CUR = {mw:null, park:""};
+const MWL = ["hiç","biraz","çok"];
+function mwAsk(box, cb){
+  window.scrollTo(0,0);
+  box.innerHTML = `<p class="qbig">Okurken aklın başka yere kaydı mı?</p><p class="muted small">Dürüst cevap ver; amaç dağılmanın anlamayı ne kadar etkilediğini görmek.</p><div class="row">${MWL.map((l,i)=>`<button class="btn ghost" data-mw="${i}">${l.charAt(0).toUpperCase()+l.slice(1)}</button>`).join("")}</div>`;
+  box.querySelectorAll("[data-mw]").forEach(b=>b.onclick=()=>{ CUR.mw = +b.dataset.mw; cb(); });
+}
+function parkScreen(exId, t){
+  VIEW = "ex";
+  shell(exHeader(exId, t) + `<div class="panel"><label class="f" for="pk" style="margin-top:0">Başlamadan önce: aklını meşgul eden bir şey var mı?</label>
+    <p class="muted small" style="margin-top:0">Buraya yaz ve bırak. Egzersiz bitince sana geri göstereceğim, sonra onunla ilgilenebilirsin.</p>
+    <textarea id="pk" style="min-height:80px"></textarea>
+    <p class="row" style="margin-bottom:0"><button class="btn" data-park>Yazdım, başla</button><button class="btn ghost" data-skip>Aklımda bir şey yok</button></p></div>`, "home");
+  bindBack();
+  $("[data-park]").onclick = ()=>{ CUR.park = $("#pk").value.trim(); go(()=>RUN[exId](t)); };
+  $("[data-skip]").onclick = ()=>{ CUR.park = ""; go(()=>RUN[exId](t)); };
+}
+
+const EX = [
+{id:"baseline",name:"Seviye testi",dev:"Bilgisayar",desc:"Normal hızında oku, 4 soruyu cevapla. Diğer egzersizlerin temposu buna göre ayarlanır."},
+{id:"preview",name:"Ön tarama",dev:"Bilgisayar",desc:"60 saniye boyunca sadece başlıklara ve ilk cümlelere bak, ne anlatıldığını tahmin et, sonra oku."},
+{id:"pacer",name:"Tempolu okuma",dev:"İkisi de",desc:"Vurgu, metin üzerinde seviyenin biraz üstünde bir tempoda ilerler. Onu takip et."},
+{id:"skim",name:"Ana fikir avı",dev:"Telefon",desc:"Metni kısa bir süre görürsün. Her kelimeyi okumadan ana fikri yakala."},
+{id:"scan",name:"Bilgi avı",dev:"Telefon",desc:"Önce soruyu görürsün, sonra cevabı metinde olabildiğince hızlı bulursun."},
+{id:"first",name:"İlk cümle okuması",dev:"Telefon",desc:"Her paragrafın yalnızca ilk cümlesini oku ve ana fikri tahmin et."},
+{id:"summary",name:"Özetle",dev:"Bilgisayar",desc:"Oku, metne bakmadan iki cümleyle özetle, sonra özetini ana fikirle karşılaştır."}
+];
+const LANGS = {tr:"Türkçe",en:"İngilizce"};
+const THRESHOLD = 0.7;
+
+/* ---------- State & storage (this device only; backup via export/import) ---------- */
+let S = {sessions:[], lang:"tr"};
+let OWN = [];
+const LS_KEY = "okuma-antrenmani-v1";
+function loadLocal(){
+  try{ const r = localStorage.getItem(LS_KEY); if(r){ const d = JSON.parse(r); if(d && d.S){ S.sessions = d.S.sessions||[]; S.lang = d.S.lang||"tr"; } OWN = (d && d.OWN)||[]; } }catch(e){}
+}
+function saveLocal(){ try{ localStorage.setItem(LS_KEY, JSON.stringify({S, OWN})); }catch(e){ toast("Kaydedilemedi: cihaz depolaması dolu ya da kapalı olabilir."); } }
+function persist(){ saveLocal(); }
+function persistText(t){ saveLocal(); }
+function removeTextRemote(id){ saveLocal(); }
+function setFoot(){
+  document.getElementById("foot").textContent = "İlerlemen bu cihazda kaydediliyor. Diğer cihaza taşımak ya da yedeklemek için İlerleme bölümündeki “Yedekle” kısmını kullan. Hazır metinler kurgusaldır ve bu uygulama için yazılmıştır.";
+}
+function toast(msg){
+  const el = document.createElement("div"); el.className = "toast"; el.setAttribute("role","status"); el.textContent = msg;
+  document.body.appendChild(el); setTimeout(()=>el.remove(), 3200);
+}
+
+/* ---------- Backup: export / import ---------- */
+function backupJSON(){ return JSON.stringify({app:"okuma-antrenmani", v:1, exportedAt:new Date().toISOString(), S, OWN}); }
+async function exportBackup(){
+  const name = "okuma-yedek-" + new Date().toISOString().slice(0,10) + ".json";
+  const data = backupJSON();
+  try{
+    const file = new File([data], name, {type:"application/json"});
+    if(navigator.canShare && navigator.canShare({files:[file]})){ await navigator.share({files:[file], title:"Okuma antrenmanı yedeği"}); return; }
+  }catch(e){ if(e && e.name === "AbortError") return; }
+  const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([data], {type:"application/json"})); a.download = name;
+  document.body.appendChild(a); a.click(); setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+}
+async function copyBackup(){
+  try{ await navigator.clipboard.writeText(backupJSON()); toast("Yedek panoya kopyalandı."); }
+  catch(e){ toast("Panoya kopyalanamadı; dosya olarak dışa aktarmayı dene."); }
+}
+function importBackup(raw){
+  let d; try{ d = JSON.parse(raw); }catch(e){ return {ok:false, text:"Bu bir yedek dosyası gibi görünmüyor (JSON okunamadı)."}; }
+  const inS = d && d.S && Array.isArray(d.S.sessions) ? d.S.sessions : (d && Array.isArray(d.sessions) ? d.sessions : null);
+  const inOwn = d && Array.isArray(d.OWN) ? d.OWN : [];
+  if(!inS) return {ok:false, text:"Yedekte seans verisi bulunamadı."};
+  const byT = new Map(); S.sessions.forEach(s=>byT.set(s.t, s));
+  let addS = 0; inS.forEach(s=>{ if(s && typeof s.t === "number" && !byT.has(s.t)){ byT.set(s.t, s); addS++; } });
+  S.sessions = Array.from(byT.values()).sort((a,b)=>a.t-b.t).slice(-400);
+  const byId = new Map(); OWN.forEach(t=>byId.set(t.id, t));
+  let addT = 0; inOwn.forEach(t=>{ if(t && t.id && Array.isArray(t.blocks) && !byId.has(t.id)){ byId.set(t.id, t); addT++; } });
+  OWN = Array.from(byId.values());
+  saveLocal();
+  return {ok:true, text:`İçe aktarıldı: ${addS} yeni seans, ${addT} yeni metin. Zaten olanlar tekrar eklenmedi.`};
+}
+
+/* ---------- Helpers ---------- */
+const $ = (sel, root=document) => root.querySelector(sel);
+function esc(s){ return String(s).replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+function wc(s){ return (String(s).match(/\S+/g)||[]).length; }
+function textWords(t){ return t.blocks.reduce((n,b)=>n + wc(b.h || b.p || ""), 0); }
+function plain(t){ return t.blocks.map(b=>b.h || b.p).join("\n\n"); }
+function firstSentence(p){ const m = p.match(/^[\s\S]*?[.!?…](?=["”’)]?\s|["”’)]?$)/); return m ? m[0] : p; }
+function blocksHTML(t){ return t.blocks.map(b=> b.h ? `<h3>${esc(b.h)}</h3>` : `<p>${esc(b.p)}</p>`).join(""); }
+function shuffle(a){ a = a.slice(); for(let i=a.length-1;i>0;i--){ const j = Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+function fmtTime(s){ s = Math.max(0, Math.round(s)); return Math.floor(s/60) + ":" + String(s%60).padStart(2,"0"); }
+function pct(x){ return x == null ? "–" : "%" + Math.round(x*100); }
+function r10(x){ return Math.round(x/10)*10; }
+function allTexts(){ return TEXTS.concat(OWN.filter(t=>t.q && t.q.length)); }
+function getText(id){ return allTexts().find(t=>t.id === id); }
+function last(ex, lang){ for(let i=S.sessions.length-1;i>=0;i--){ const s = S.sessions[i]; if(s.ex === ex && s.lang === lang) return s; } return null; }
+function exName(id){ const e = EX.find(x=>x.id===id); return e ? e.name : id; }
+function pacerSpeed(lang){
+  const p = last("pacer", lang);
+  if(p && p.target){ if(p.score != null && p.score >= 0.75) return p.target + 10; if(p.score != null && p.score < THRESHOLD) return Math.max(100, p.target - 20); return p.target; }
+  const b = last("baseline", lang);
+  return b && b.wpm ? Math.max(120, r10(b.wpm * 1.1)) : 220;
+}
+
+/* ---------- Shell & navigation ---------- */
+const app = document.getElementById("app");
+let VIEW = "home"; let cleanup = null;
+function go(fn){ if(cleanup){ try{cleanup();}catch(e){} cleanup = null; } fn(); window.scrollTo(0,0); }
+function shell(inner, active){
+  app.innerHTML = `<header class="top"><button class="brand" data-nav="home">Okuma antrenmanı</button>
+  <nav class="tabs" aria-label="Bölümler">${[["home","Antrenman"],["texts","Metinlerim"],["stats","İlerleme"]].map(([k,l])=>`<button data-nav="${k}" ${k===active?'aria-current="page"':''}>${l}</button>`).join("")}</nav></header><main id="main">${inner}</main>`;
+  app.querySelectorAll("[data-nav]").forEach(b=>b.onclick=()=>go(()=>VIEWS[b.dataset.nav]()));
+}
+
+/* ---------- Home ---------- */
+function suggest(L){
+  const b = last("baseline", L);
+  if(!b) return {id:"baseline", why:`${LANGS[L]} için henüz seviye ölçümün yok. Önce onu yapalım; diğer egzersizlerin temposu buna göre ayarlanır.`};
+  if(Date.now() - b.t > 14*864e5) return {id:"baseline", why:"Son seviye testinin üzerinden iki haftadan fazla geçti. Gelişimini görmek için yeniden ölçelim."};
+  const rot = ["preview","pacer","skim","scan","summary","first"];
+  const n = S.sessions.filter(s=>s.lang===L && s.ex!=="baseline").length;
+  const id = rot[n % rot.length];
+  return {id, why: EX.find(e=>e.id===id).desc};
+}
+function viewHome(){
+  VIEW = "home";
+  const L = S.lang, sg = suggest(L), ex = EX.find(e=>e.id===sg.id);
+  shell(`<section>
+    <div class="langs" role="group" aria-label="Dil">${Object.keys(LANGS).map(k=>`<button class="chip ${k===L?'on':''}" data-lang="${k}" aria-pressed="${k===L}">${LANGS[k]}</button>`).join("")}</div>
+    <p class="muted" style="margin:0">Bugün için önerim</p>
+    <h1 class="hero"><span class="marker">${esc(ex.name)}</span></h1>
+    <p style="max-width:52ch">${esc(sg.why)}</p>
+    <button class="btn" data-ex="${ex.id}">Başla</button>
+  </section>
+  <h2 class="sec">Tüm egzersizler</h2>
+  <ul class="exlist">${EX.map(e=>`<li><button class="exrow" data-ex="${e.id}"><span class="exname">${esc(e.name)}</span><span class="exdev">${esc(e.dev)}</span><span class="exdesc">${esc(e.desc)}</span></button></li>`).join("")}</ul>`, "home");
+  app.querySelectorAll("[data-lang]").forEach(b=>b.onclick=()=>{ S.lang = b.dataset.lang; persist(); viewHome(); });
+  app.querySelectorAll("[data-ex]").forEach(b=>b.onclick=()=>go(()=>viewPick(b.dataset.ex)));
+}
+
+/* ---------- Text picker ---------- */
+function viewPick(exId){
+  VIEW = "pick";
+  const L = S.lang, ex = EX.find(e=>e.id===exId);
+  const list = allTexts().filter(t=>t.lang===L).map(t=>({t, used:S.sessions.filter(s=>s.ex===exId && s.textId===t.id).length})).sort((a,b)=>a.used-b.used);
+  shell(`<button class="back" data-back>Geri</button>
+    <h1 class="title">${esc(ex.name)}</h1><p class="muted">${esc(ex.desc)}</p>
+    <h2 class="sec">Bir metin seç</h2>
+    <ul class="tlist">${list.map(({t,used})=>`<li><button class="tpick" data-t="${esc(t.id)}"><b>${esc(t.title)}</b><span class="tag">${esc(t.genre)}, ${textWords(t)} kelime${t.own?", kendi metnin":""}${used?`, bu egzersizde ${used} kez kullandın`:""}</span></button></li>`).join("")}</ul>
+    <p class="muted small">Kendi metinlerin, “Metinlerim” bölümünde soruları hazırlandıktan sonra burada görünür.</p>`, "home");
+  $("[data-back]").onclick = ()=>go(viewHome);
+  app.querySelectorAll("[data-t]").forEach(b=>b.onclick=()=>{ CUR = {mw:null, park:""}; go(()=>parkScreen(exId, getText(b.dataset.t))); });
+}
+function exHeader(exId, t){
+  return `<button class="back" data-back>Vazgeç</button><p class="muted small" style="margin:0">${esc(exName(exId))}</p><h1 class="title">${esc(t.title)}</h1>`;
+}
+function bindBack(){ const b = $("[data-back]"); if(b) b.onclick = ()=>go(viewHome); }
+
+/* ---------- Components ---------- */
+function deepRead(box, t, onDone, intro){
+  box.innerHTML = `<div class="panel"><p style="margin-top:0">${intro || "Hazır olduğunda başlat. Normal anlama hızında oku; gereksiz geri dönüşlerden kaçınmaya çalış."}</p><p class="muted small">${textWords(t)} kelime</p><button class="btn" data-go>Okumaya başla</button></div>`;
+  $("[data-go]", box).onclick = ()=>{
+    const t0 = performance.now();
+    box.innerHTML = `<article class="read">${blocksHTML(t)}</article><div class="dock"><span class="clock" data-clk>0:00</span><span class="grow"></span><button class="btn" data-done>Bitirdim</button></div>`;
+    const clk = $("[data-clk]", box);
+    const iv = setInterval(()=>{ clk.textContent = fmtTime((performance.now()-t0)/1000); }, 500);
+    cleanup = ()=>clearInterval(iv);
+    $("[data-done]", box).onclick = ()=>{ clearInterval(iv); cleanup = null; onDone((performance.now()-t0)/1000); };
+  };
+}
+function quiz(box, qs, onDone, heading){
+  if(heading === "Şimdi metne bakmadan cevapla" && CUR.mw == null){ mwAsk(box, ()=>quiz(box, qs, onDone, heading)); return; }
+  const items = qs.map(q=>({q, order:shuffle(q.o.map((_,i)=>i)), pick:null, voided:false}));
+  let checked = false;
+  function score(){ const live = items.filter(i=>!i.voided); if(!live.length) return null; return live.filter(i=>i.pick===i.q.a).length / live.length; }
+  function draw(){
+    box.innerHTML = `${heading?`<h2 class="sec" style="margin-top:8px">${heading}</h2>`:""}${items.map((it,qi)=>`<fieldset class="qitem ${it.voided?"voided":""}"><legend>${esc(it.q.q)}</legend>
+      ${it.order.map(oi=>{ let cls = ""; if(checked && !it.voided){ if(oi===it.q.a) cls="ok"; else if(oi===it.pick) cls="bad"; }
+        return `<button class="opt ${cls}" data-q="${qi}" data-o="${oi}" aria-pressed="${it.pick===oi}" ${checked?"disabled":""}>${esc(it.q.o[oi])}</button>`; }).join("")}
+      ${checked?`<button class="flag" data-flag="${qi}">${it.voided?"Soruyu geri al":"Bu soru hatalı, sayma"}</button>`:""}</fieldset>`).join("")}
+      ${checked ? `<p><b>Anlama: ${pct(score())}</b>${items.some(i=>i.voided)?' <span class="muted small">(hatalı işaretlenen sorular hariç)</span>':""}</p><button class="btn" data-next>Kaydet ve devam et</button>`
+               : `<button class="btn" data-check ${items.every(i=>i.pick!=null)?"":"disabled"}>Cevapları kontrol et</button>`}`;
+    box.querySelectorAll("[data-o]").forEach(b=>b.onclick=()=>{ items[+b.dataset.q].pick = +b.dataset.o; draw(); });
+    box.querySelectorAll("[data-flag]").forEach(b=>b.onclick=()=>{ const it = items[+b.dataset.flag]; it.voided = !it.voided; draw(); });
+    const c = $("[data-check]", box); if(c) c.onclick = ()=>{ checked = true; draw(); };
+    const n = $("[data-next]", box); if(n) n.onclick = ()=>onDone(score());
+  }
+  draw();
+}
+function record(rec){
+  rec.t = Date.now(); rec.lang = S.lang;
+  if(CUR.mw != null) rec.mw = CUR.mw;
+  rec.parked = !!CUR.park;
+  if(rec.wpm != null && rec.score != null) rec.eff = Math.round(rec.wpm * rec.score);
+  S.sessions.push(rec); if(S.sessions.length > 400) S.sessions = S.sessions.slice(-400);
+  persist();
+}
+function viewResult(rec, extra){
+  VIEW = "result";
+  record(rec);
+  const low = rec.score != null && rec.score < THRESHOLD;
+  const cells = [];
+  if(rec.wpm != null) cells.push([rec.wpm, "kelime/dakika"]);
+  if(rec.score != null) cells.push([pct(rec.score), "anlama"]);
+  if(rec.eff != null) cells.push([rec.eff, "etkili hız"]);
+  if(rec.ex === "scan" && rec.secs != null) cells.push([Math.round(rec.secs) + " sn", "bulma süresi (ort.)"]);
+  if(rec.ex === "skim" && rec.view) cells.push([rec.view, "görüntüleme hızı"]);
+  if(rec.mw != null) cells.push([MWL[rec.mw], "aklın kayması"]);
+  const parkNote = CUR.park ? `<h2 class="sec">Başlamadan önce aklındaki</h2><p class="note">“${esc(CUR.park)}”</p><p class="muted small">Okuma bitti; şimdi onunla ilgilenebilirsin.</p>` : "";
+  shell(`<p class="muted small" style="margin:0">${esc(exName(rec.ex))}</p><h1 class="title">Sonuç</h1>
+    <div class="stats">${cells.map(([v,l])=>`<div class="stat"><b>${v}</b><span>${l}</span></div>`).join("")}</div>
+    ${low ? `<p class="note low">Anlama %70’in altında kaldı. Bu seansın hızı ilerlemene sayılmaz${rec.ex==="pacer"?"; bir sonraki tempolu okumada tempo biraz düşürülecek":""}. Bu bir başarısızlık değil, doğru tempoyu bulmanın parçası.</p>` : (rec.score != null ? `<p class="note good">Anlama eşiğin üstünde. Bu seans ilerlemene sayıldı.</p>` : "")}
+    ${extra || ""}${parkNote}
+    <div class="row" style="margin-top:22px"><button class="btn" data-again>Aynı egzersiz, başka metin</button><button class="btn ghost" data-home>Ana sayfa</button></div>`, "home");
+  $("[data-again]").onclick = ()=>go(()=>viewPick(rec.ex));
+  $("[data-home]").onclick = ()=>go(viewHome);
+}
+
+/* ---------- Exercises ---------- */
+const RUN = {};
+RUN.baseline = t=>{
+  VIEW = "ex"; const words = textWords(t);
+  shell(exHeader("baseline", t) + `<div id="box"></div>`, "home"); bindBack();
+  const box = $("#box");
+  deepRead(box, t, secs=>{
+    window.scrollTo(0,0);
+    quiz(box, t.q, score=>{
+      const wpm = Math.round(words / (secs/60));
+      viewResult({ex:"baseline", textId:t.id, words, secs:Math.round(secs), wpm, score});
+    }, "Şimdi metne bakmadan cevapla");
+  }, "Normal hızında oku; hızlanmaya çalışma. Amaç bugünkü gerçek seviyeni ölçmek.");
+};
+
+RUN.pacer = t=>{
+  VIEW = "ex"; let target = pacerSpeed(S.lang);
+  shell(exHeader("pacer", t) + `<div id="box"></div>`, "home"); bindBack();
+  const box = $("#box");
+  function intro(){
+    box.innerHTML = `<div class="panel"><p style="margin-top:0">Sarı vurgu metin üzerinde ilerleyecek. Gözünü vurgunun biraz önünde tutmaya çalış. Gerekirse okurken tempoyu değiştirebilirsin.</p>
+      <div class="row"><button class="btn ghost sm" data-m>Yavaş</button><span class="clock" data-sp>${target} kelime/dk</span><button class="btn ghost sm" data-p>Hızlı</button></div>
+      <p class="muted small">${last("baseline", S.lang) ? "Tempo, seviye testine ve son tempolu okumana göre ayarlandı." : "Henüz seviye testin yok; varsayılan tempoyla başlıyoruz."}</p>
+      <button class="btn" data-go>Başlat</button></div>`;
+    $("[data-m]", box).onclick = ()=>{ target = Math.max(100, target-20); $("[data-sp]", box).textContent = target + " kelime/dk"; };
+    $("[data-p]", box).onclick = ()=>{ target = Math.min(900, target+20); $("[data-sp]", box).textContent = target + " kelime/dk"; };
+    $("[data-go]", box).onclick = run;
+  }
+  function run(){
+    const html = t.blocks.map(b=>{ const s = esc(b.h || b.p).split(/(\s+)/).map(w=>/\S/.test(w) ? `<span class="w">${w}</span>` : w).join(""); return b.h ? `<h3>${s}</h3>` : `<p>${s}</p>`; }).join("");
+    box.innerHTML = `<article class="read">${html}</article><div class="dock"><button class="btn ghost sm" data-pause>Duraklat</button><button class="btn ghost sm" data-m>Yavaş</button><span class="clock" data-sp>${target}</span><button class="btn ghost sm" data-p>Hızlı</button><span class="grow"></span><button class="btn sm" data-end>Bitir</button></div>`;
+    const ws = Array.from(box.querySelectorAll(".w")); const CH = 3;
+    let i = 0, timer = null, paused = false, elapsed = 0, lastT = performance.now();
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    function mark(on){ for(let k=i;k<Math.min(i+CH, ws.length);k++) ws[k].classList.toggle("hl", on); }
+    function tick(){
+      mark(false); i += CH;
+      if(i >= ws.length){ finish(); return; }
+      mark(true);
+      const r = ws[i].getBoundingClientRect(); const vh = window.innerHeight;
+      if(r.bottom > vh - 110 || r.top < 40) ws[i].scrollIntoView({block:"center", behavior: reduce ? "auto" : "smooth"});
+      timer = setTimeout(tick, CH*60000/target);
+    }
+    function stop(){ if(timer){ clearTimeout(timer); timer = null; } }
+    function finish(){
+      stop(); if(!paused) elapsed += performance.now()-lastT; cleanup = null;
+      const read = Math.min(ws.length, i); const secs = elapsed/1000;
+      window.scrollTo(0,0);
+      quiz(box, t.q, score=>{
+        const wpm = Math.round(read / (secs/60));
+        viewResult({ex:"pacer", textId:t.id, words:read, secs:Math.round(secs), wpm, target, score}, read < ws.length ? `<p class="note">Metnin yaklaşık yüzde ${Math.round(read/ws.length*100)} kadarını okudun; sorular tüm metinden geldiği için anlama puanı düşük çıkabilir.</p>` : "");
+      }, "Şimdi metne bakmadan cevapla");
+    }
+    mark(true); timer = setTimeout(tick, CH*60000/target);
+    cleanup = stop;
+    $("[data-pause]", box).onclick = e=>{
+      if(paused){ paused = false; lastT = performance.now(); e.target.textContent = "Duraklat"; timer = setTimeout(tick, CH*60000/target); }
+      else { paused = true; stop(); elapsed += performance.now()-lastT; e.target.textContent = "Devam et"; }
+    };
+    $("[data-m]", box).onclick = ()=>{ target = Math.max(100, target-20); $("[data-sp]", box).textContent = target; };
+    $("[data-p]", box).onclick = ()=>{ target = Math.min(900, target+20); $("[data-sp]", box).textContent = target; };
+    $("[data-end]", box).onclick = ()=>{ if(!paused){ elapsed += performance.now()-lastT; paused = true; } stop(); mark(false); finishEarly(); };
+    function finishEarly(){ cleanup = null; const read = Math.min(ws.length, i + CH); const secs = elapsed/1000; window.scrollTo(0,0);
+      quiz(box, t.q, score=>{ const wpm = Math.round(read/(secs/60)); viewResult({ex:"pacer", textId:t.id, words:read, secs:Math.round(secs), wpm, target, score}, read < ws.length ? `<p class="note">Metnin yaklaşık yüzde ${Math.round(read/ws.length*100)} kadarını okudun; sorular tüm metinden geldiği için anlama puanı düşük çıkabilir.</p>` : ""); }, "Şimdi metne bakmadan cevapla"); }
+  }
+  intro();
+};
+
+function firstsHTML(t){
+  return `<ul class="firsts read">${t.blocks.map(b=> b.h ? `<li><h3>${esc(b.h)}</h3></li>` : `<li>${esc(firstSentence(b.p))} <span class="muted">…</span></li>`).join("")}</ul>`;
+}
+RUN.preview = t=>{
+  VIEW = "ex"; const words = textWords(t);
+  shell(exHeader("preview", t) + `<div id="box"></div>`, "home"); bindBack();
+  const box = $("#box");
+  box.innerHTML = `<div class="panel"><p style="margin-top:0">60 saniye boyunca yalnızca başlıkları ve her paragrafın ilk cümlesini göreceksin. Amaç metnin haritasını çıkarmak.</p><button class="btn" data-go>Ön taramayı başlat</button></div>`;
+  $("[data-go]", box).onclick = ()=>{
+    let left = 60;
+    box.innerHTML = `<div class="readhead"><span class="muted">Ön tarama</span><span class="clock" data-c>1:00</span></div><div class="bar"><i data-b></i></div>${firstsHTML(t)}<div class="dock"><span class="grow"></span><button class="btn" data-ready>Hazırım</button></div>`;
+    const iv = setInterval(()=>{ left--; $("[data-c]", box).textContent = fmtTime(left); $("[data-b]", box).style.width = (left/60*100) + "%"; if(left <= 0) predict(); }, 1000);
+    cleanup = ()=>clearInterval(iv);
+    $("[data-ready]", box).onclick = predict;
+    function predict(){
+      clearInterval(iv); cleanup = null; window.scrollTo(0,0);
+      box.innerHTML = `<label class="f" for="pr">Bu metin ne anlatıyor? Bir cümleyle tahmin et.</label><textarea id="pr" style="min-height:80px"></textarea><p><button class="btn" data-n>Şimdi oku</button></p>`;
+      $("[data-n]", box).onclick = ()=>{
+        const guess = $("#pr", box).value.trim();
+        deepRead(box, t, secs=>{
+          window.scrollTo(0,0);
+          quiz(box, t.q, score=>{
+            const main = t.q[0].o[t.q[0].a];
+            viewResult({ex:"preview", textId:t.id, words, secs:Math.round(secs), wpm:Math.round(words/(secs/60)), score},
+              `<h2 class="sec">Tahminin ve ana fikir</h2><p class="note">${guess ? "“" + esc(guess) + "”" : "Tahmin yazmadın."}</p><p class="note good">${esc(main)}</p><p class="muted small">Ön taramanın faydası, okurken metnin nereye gittiğini bilmen. Tahminin ana fikre yakınsa bu adımı iş metinlerinde alışkanlık haline getirebilirsin.</p>`);
+          }, "Şimdi metne bakmadan cevapla");
+        }, "Haritayı çıkardın. Şimdi metnin tamamını normal hızında oku.");
+      };
+    }
+  };
+};
+
+RUN.skim = t=>{
+  VIEW = "ex"; const words = textWords(t);
+  const dur = Math.max(15, Math.round(words/650*60));
+  shell(exHeader("skim", t) + `<div id="box"></div>`, "home"); bindBack();
+  const box = $("#box");
+  box.innerHTML = `<div class="panel"><p style="margin-top:0">Metni <b>${dur} saniye</b> göreceksin; bu süre her kelimeyi okumaya yetmez. Başlıklara, ilk cümlelere ve tekrar eden kavramlara bak. Süre bitince ana fikri soracağım.</p><button class="btn" data-go>Başlat</button></div>`;
+  $("[data-go]", box).onclick = ()=>{
+    let left = dur;
+    box.innerHTML = `<div class="readhead"><span class="muted">Göz gezdir</span><span class="clock" data-c>${fmtTime(left)}</span></div><div class="bar"><i data-b></i></div><article class="read">${blocksHTML(t)}</article>`;
+    const iv = setInterval(()=>{ left--; $("[data-c]", box).textContent = fmtTime(left); $("[data-b]", box).style.width = (left/dur*100) + "%"; if(left <= 0) ask(); }, 1000);
+    cleanup = ()=>clearInterval(iv);
+    function ask(){
+      clearInterval(iv); cleanup = null; window.scrollTo(0,0);
+      quiz(box, [t.q[0]], score=>viewResult({ex:"skim", textId:t.id, words, secs:dur, wpm:null, score, view:Math.round(words/(dur/60))}), "Süre doldu");
+    }
+  };
+};
+
+RUN.scan = t=>{
+  VIEW = "ex";
+  shell(exHeader("scan", t) + `<div id="box"></div>`, "home"); bindBack();
+  const box = $("#box"); const res = []; let k = 0;
+  function step(){
+    if(k >= t.scan.length){
+      const sc = res.filter(r=>r.ok).length / res.length;
+      const avg = res.reduce((n,r)=>n+r.secs,0)/res.length;
+      viewResult({ex:"scan", textId:t.id, words:textWords(t), secs:Math.round(avg), wpm:null, score:sc}, `<p class="muted small">Bilgi avında hız ölçülmez; önemli olan soruyu aklında tutup metinde yalnızca onu aramak.</p>`);
+      return;
+    }
+    const s = t.scan[k];
+    box.innerHTML = `<p class="muted small">Soru ${k+1} / ${t.scan.length}</p><p class="qbig">${esc(s.q)}</p><button class="btn" data-go>Metni aç ve ara</button>`;
+    $("[data-go]", box).onclick = ()=>{
+      const t0 = performance.now();
+      box.innerHTML = `<p class="muted small" style="margin-top:0">Aradığın: <b>${esc(s.q)}</b></p><article class="read">${blocksHTML(t)}</article><div class="dock"><span class="clock" data-c>0:00</span><span class="grow"></span><button class="btn" data-found>Buldum</button></div>`;
+      const iv = setInterval(()=>{ $("[data-c]", box).textContent = fmtTime((performance.now()-t0)/1000); }, 500);
+      cleanup = ()=>clearInterval(iv);
+      $("[data-found]", box).onclick = ()=>{
+        clearInterval(iv); cleanup = null; const secs = (performance.now()-t0)/1000; window.scrollTo(0,0);
+        const order = shuffle(s.o.map((_,i)=>i));
+        box.innerHTML = `<p class="qbig">${esc(s.q)}</p>${order.map(oi=>`<button class="opt" data-o="${oi}">${esc(s.o[oi])}</button>`).join("")}`;
+        box.querySelectorAll("[data-o]").forEach(b=>b.onclick=()=>{
+          const pick = +b.dataset.o, ok = pick === s.a;
+          box.querySelectorAll("[data-o]").forEach(x=>{ x.disabled = true; const oi = +x.dataset.o; if(oi===s.a) x.classList.add("ok"); else if(oi===pick) x.classList.add("bad"); });
+          res.push({ok, secs});
+          const nb = document.createElement("p"); nb.innerHTML = `<span class="muted">${Math.round(secs)} saniyede buldun.</span> <button class="btn sm" data-next>Devam</button>`; box.appendChild(nb);
+          $("[data-next]", box).onclick = ()=>{ k++; step(); };
+        });
+      };
+    };
+  }
+  step();
+};
+
+RUN.first = t=>{
+  VIEW = "ex";
+  shell(exHeader("first", t) + `<div id="box"></div>`, "home"); bindBack();
+  const box = $("#box");
+  box.innerHTML = `<div class="panel"><p style="margin-top:0">Yalnızca başlıkları ve her paragrafın ilk cümlesini göreceksin. İyi yazılmış açıklayıcı metinlerde ana fikir çoğunlukla ilk cümlelerdedir; öykülerde ise bu her zaman geçerli değildir.</p><button class="btn" data-go>Başlat</button></div>`;
+  $("[data-go]", box).onclick = ()=>{
+    const t0 = performance.now();
+    box.innerHTML = `${firstsHTML(t)}<div class="dock"><span class="grow"></span><button class="btn" data-done>Bitirdim</button></div>`;
+    $("[data-done]", box).onclick = ()=>{
+      const secs = (performance.now()-t0)/1000; window.scrollTo(0,0);
+      quiz(box, [t.q[0]], score=>{
+        viewResult({ex:"first", textId:t.id, words:textWords(t), secs:Math.round(secs), wpm:null, score},
+          `<p class="muted small">Bu yöntemin bu metin türünde ne kadar işe yaradığını karşılaştırmak istersen tam metin aşağıda.</p><details><summary>Tam metni göster</summary><article class="read" style="margin-top:12px">${blocksHTML(t)}</article></details>`);
+      }, "Ana fikir hangisi?");
+    };
+  };
+};
+
+RUN.summary = t=>{
+  VIEW = "ex"; const words = textWords(t);
+  shell(exHeader("summary", t) + `<div id="box"></div>`, "home"); bindBack();
+  const box = $("#box");
+  deepRead(box, t, secs=>mwAsk(box, ()=>{
+    window.scrollTo(0,0);
+    box.innerHTML = `<label class="f" for="sm">Metni iki cümleyle özetle. Metne bakma.</label><textarea id="sm"></textarea><p class="row"><button class="btn" data-fb>Ana fikirle karşılaştır</button></p><div data-out></div>`;
+    $("[data-fb]", box).onclick = ()=>{
+      const sum = $("#sm", box).value.trim(); const out = $("[data-out]", box);
+      if(wc(sum) < 5){ out.innerHTML = `<p class="err">Biraz daha yaz: en az bir tam cümle.</p>`; return; }
+      $("[data-fb]", box).disabled = true;
+      const wpm = Math.round(words/(secs/60));
+      const main = t.q[0].o[t.q[0].a];
+      out.innerHTML = `<p class="note">Özetin: “${esc(sum)}”</p><p class="note good">Ana fikir: ${esc(main)}</p><p>Özetin ana fikri yakaladı mı? Dürüst değerlendir.</p><div class="row"><button class="btn ghost sm" data-s="1">Evet</button><button class="btn ghost sm" data-s="0.5">Kısmen</button><button class="btn ghost sm" data-s="0">Hayır</button></div>`;
+      box.querySelectorAll("[data-s]").forEach(b=>b.onclick=()=>viewResult({ex:"summary", textId:t.id, words, secs:Math.round(secs), wpm, score:+b.dataset.s}, `<p class="muted small">Özetin: “${esc(sum)}” (kendi değerlendirmen)</p>`));
+    };
+  }), "Normal hızında oku. Bitirince metne bakmadan iki cümlelik bir özet yazacaksın.");
+};
+
+/* ---------- Own texts ---------- */
+function parseOwn(raw){
+  let parts = raw.replace(/\r/g,"").split(/\n\s*\n/).map(s=>s.trim()).filter(Boolean);
+  if(parts.length < 2) parts = raw.split(/\n/).map(s=>s.trim()).filter(Boolean);
+  const blocks = []; let total = 0;
+  for(const p of parts){
+    const clean = p.replace(/^#+\s*/, "").replace(/\s*\n\s*/g, " ");
+    const n = wc(clean);
+    if(total + n > 3000) break;
+    total += n;
+    if(/^#/.test(p) || (clean.length < 90 && !/[.!?…:;,]$/.test(clean))) blocks.push({h:clean}); else blocks.push({p:clean});
+  }
+  return {blocks, total};
+}
+function validQ(x){ return x && typeof x.q === "string" && Array.isArray(x.o) && x.o.length >= 3 && x.o.every(s=>typeof s === "string") && Number.isInteger(x.a) && x.a >= 0 && x.a < x.o.length; }
+function qPrompt(lang, body){
+  const langName = lang === "en" ? "İngilizce" : "Türkçe";
+  return `Bir okuma antrenmanı uygulaması için aşağıdaki metinden okuma soruları hazırla. Yalnızca JSON döndür, başka hiçbir şey yazma. Şema:
+{"main":{"q":"soru","o":["doğru cevap","yanlış","yanlış","yanlış"]},"q":[{"q":"soru","o":["4 seçenek"],"a":doğru seçeneğin 0'dan başlayan indeksi}],"scan":[{"q":"soru","o":["4 seçenek"],"a":indeks}]}
+Kurallar: Tüm sorular ve seçenekler ${langName} olsun. "main", metnin ana fikrini sorar ve ilk seçeneği doğrudur. "q" dizisinde tam 3 soru olsun: ikisi önemli detayları, biri bir çıkarımı sorsun. "scan" dizisinde tam 2 soru olsun ve her biri metinde tek bir yerde geçen somut bir bilgiyi (sayı, isim, tarih, terim) sorsun. Her soru yalnızca bu metinden cevaplanabilsin; yanlış seçenekler makul ama açıkça yanlış olsun. Doğru seçeneğin yerini q ve scan sorularında değiştir.
+
+METİN:
+${body}`;
+}
+function parseQ(raw){
+  let s = String(raw).trim().replace(/^```(?:json)?\s*/i, "").replace(/```\s*$/, "");
+  const i = s.indexOf("{"), j = s.lastIndexOf("}"); if(i < 0 || j < i) return null;
+  let r; try{ r = JSON.parse(s.slice(i, j+1)); }catch(e){ return null; }
+  const main = r && r.main && {q:r.main.q, o:r.main.o, a:0};
+  const qs = [main].concat((r && r.q) || []).filter(validQ);
+  const sc = ((r && r.scan) || []).filter(validQ);
+  if(!validQ(main) || qs.length < 3 || sc.length < 1) return null;
+  return {q:qs.slice(0,4), scan:sc.slice(0,2)};
+}
+function viewTexts(msg){
+  VIEW = "texts";
+  shell(`<h1 class="title">Metinlerim</h1>
+    <p class="muted" style="max-width:56ch">Okumak istediğin bir metni (makale, kitap bölümü, Claude yanıtı) ekle. Sorular için: “İstemi kopyala”ya bas, Claude’a yapıştır, gelen cevabı aşağıdaki soru kutusuna yapıştır. En fazla 3000 kelime alınır.</p>
+    <div class="panel">
+      <label class="f" for="tt">Başlık</label><input type="text" id="tt" maxlength="120">
+      <div class="grid2"><div><label class="f" for="tl">Dil</label><select id="tl"><option value="tr">Türkçe</option><option value="en">İngilizce</option></select></div>
+      <div><label class="f" for="tg">Tür</label><select id="tg"><option>Makale</option><option>Kitap</option><option>Yanıt</option><option>Rapor</option><option>Diğer</option></select></div></div>
+      <label class="f" for="tx">Metin</label><textarea id="tx" style="min-height:200px" placeholder="Paragraflar arasında boş satır bırakırsan başlıklar ve paragraflar doğru ayrılır."></textarea>
+      <p class="row"><button class="btn ghost" data-cp>1. İstemi kopyala</button><span data-cps class="muted small"></span></p>
+      <label class="f" for="tq">2. Claude’un cevabı (JSON)</label><textarea id="tq" style="min-height:110px" placeholder='{"main":{...},"q":[...],"scan":[...]}'></textarea>
+      <p class="row" style="margin-bottom:0"><button class="btn" data-save>3. Kaydet</button><span data-st class="muted small"></span></p>
+    </div>
+    ${msg?`<p class="note ${msg.ok?"good":"low"}">${esc(msg.text)}</p>`:""}
+    <h2 class="sec">Kayıtlı metinler</h2>
+    ${OWN.length ? `<ul class="tlist">${OWN.slice().reverse().map(t=>`<li><div class="tpick" style="cursor:default"><b>${esc(t.title)}</b><span class="tag">${LANGS[t.lang]||t.lang}, ${esc(t.genre)}, ${textWords(t)} kelime</span></div><button class="btn ghost sm" data-del="${esc(t.id)}">Sil</button></li>`).join("")}</ul>` : `<p class="muted">Henüz kayıtlı metnin yok. İlk metnini yukarıdan ekleyebilirsin.</p>`}`, "texts");
+  $("#tl").value = S.lang;
+  app.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{
+    const t = OWN.find(x=>x.id===b.dataset.del); if(!t) return;
+    if(!confirm(`“${t.title}” silinsin mi?`)) return;
+    OWN = OWN.filter(x=>x.id!==t.id); removeTextRemote(t.id); viewTexts({ok:true, text:"Metin silindi."});
+  });
+  $("[data-cp]").onclick = async ()=>{
+    const raw = $("#tx").value.trim(), cps = $("[data-cps]");
+    if(wc(raw) < 120){ cps.textContent = "Önce en az 120 kelimelik metni yapıştır."; return; }
+    const {blocks} = parseOwn(raw);
+    const p = qPrompt($("#tl").value, blocks.map(b=>b.h||b.p).join("\n\n"));
+    try{ await navigator.clipboard.writeText(p); cps.textContent = "Kopyalandı. Claude’a yapıştır, cevabı aşağıya koy."; }
+    catch(e){ cps.textContent = "Panoya kopyalanamadı; tarayıcı izin vermedi."; }
+  };
+  $("[data-save]").onclick = ()=>{
+    const title = $("#tt").value.trim(), lang = $("#tl").value, genre = $("#tg").value, raw = $("#tx").value.trim();
+    const st = $("[data-st]");
+    if(!title || wc(raw) < 120){ st.textContent = "Bir başlık ve en az 120 kelimelik bir metin gerekiyor."; return; }
+    const qq = parseQ($("#tq").value);
+    if(!qq){ st.textContent = "Soru kutusundaki JSON okunamadı ya da eksik (ana fikir + en az 2 soru + 1 bilgi avı sorusu gerekli)."; return; }
+    const {blocks, total} = parseOwn(raw);
+    const t = {id:"t_" + Date.now(), own:true, lang, genre, title, blocks, q:qq.q, scan:qq.scan};
+    OWN.push(t); persistText(t);
+    viewTexts({ok:true, text:`“${title}” kaydedildi (${total} kelime). Artık egzersizlerde seçebilirsin. Sorular yapay zekâyla üretildi; hatalı bir soru görürsen sonuç ekranında “Bu soru hatalı” ile puandan çıkarabilirsin.`});
+  };
+}
+
+/* ---------- Progress ---------- */
+function spark(vals){
+  if(vals.length < 2) return `<p class="muted small">Grafik için en az iki sayılan seans gerekiyor.</p>`;
+  const W = 600, H = 90, P = 8, mx = Math.max(...vals), mn = Math.min(...vals), rg = (mx-mn) || 1;
+  const pts = vals.map((v,i)=>[P + i*(W-2*P)/(vals.length-1), H-P - (v-mn)/rg*(H-2*P)]);
+  return `<svg class="spark" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="Etkili hız eğilimi, en düşük ${mn}, en yüksek ${mx}"><polyline fill="none" stroke="var(--accent)" stroke-width="2.5" vector-effect="non-scaling-stroke" points="${pts.map(p=>p.join(",")).join(" ")}"/>${pts.map(p=>`<circle cx="${p[0]}" cy="${p[1]}" r="3" fill="var(--accent)"/>`).join("")}</svg><p class="muted small" style="margin-top:4px">Etkili hız, son ${vals.length} sayılan seans (en düşük ${mn}, en yüksek ${mx})</p>`;
+}
+function viewStats(){
+  VIEW = "stats";
+  const sec = Object.keys(LANGS).map(L=>{
+    const ss = S.sessions.filter(s=>s.lang===L);
+    if(!ss.length) return `<h2 class="sec">${LANGS[L]}</h2><p class="muted">Henüz seans yok.</p>`;
+    const b = last("baseline", L), firstB = ss.find(s=>s.ex==="baseline");
+    const counted = ss.filter(s=>s.eff != null && s.score >= THRESHOLD).slice(-15).map(s=>s.eff);
+    const rows = ss.slice(-12).reverse();
+    const avg = arr => arr.length ? arr.reduce((n,s)=>n+s.score,0)/arr.length : null;
+    const withMw = ss.filter(s=>s.mw != null && s.score != null);
+    const mwRows = [0,1,2].map(i=>{ const a = withMw.filter(s=>s.mw===i); return `<tr><td>${MWL[i].charAt(0).toUpperCase()+MWL[i].slice(1)}</td><td>${a.length}</td><td>${pct(avg(a))}</td></tr>`; }).join("");
+    const pk = ss.filter(s=>s.parked && s.mw != null), npk = ss.filter(s=>s.parked === false && s.mw != null);
+    const mwShare = arr => arr.length ? pct(arr.filter(s=>s.mw>0).length/arr.length) : "–";
+    const attn = withMw.length ? `<h3 style="font-size:.95rem;margin:26px 0 6px">Dikkat ve anlama</h3><div class="scroll"><table><thead><tr><th>Aklın kaydı mı?</th><th>Seans</th><th>Ortalama anlama</th></tr></thead><tbody>${mwRows}</tbody></table></div>
+      <p class="muted small">Aklın kaydığı seansların oranı: not yazarak başladığında ${mwShare(pk)} (${pk.length} seans), yazmadan başladığında ${mwShare(npk)} (${npk.length} seans). Birkaç haftalık veri birikmeden bu karşılaştırmadan sonuç çıkarma.</p>` : "";
+    return `<h2 class="sec">${LANGS[L]}</h2>
+      <div class="stats">
+        <div class="stat"><b>${b?b.wpm:"–"}</b><span>son seviye testi, kelime/dk</span></div>
+        <div class="stat"><b>${b?pct(b.score):"–"}</b><span>son seviye testi, anlama</span></div>
+        <div class="stat"><b>${firstB && b && firstB !== b ? (b.eff - firstB.eff >= 0 ? "+" : "") + (b.eff - firstB.eff) : "–"}</b><span>etkili hızda ilk testten bu yana değişim</span></div>
+      </div>
+      ${spark(counted)}
+      <div class="scroll"><table><thead><tr><th>Tarih</th><th>Egzersiz</th><th>Hız</th><th>Anlama</th><th>Etkili</th></tr></thead><tbody>
+      ${rows.map(s=>`<tr class="${s.score!=null && s.score<THRESHOLD?"low":""}"><td>${new Date(s.t).toLocaleDateString("tr-TR",{day:"numeric",month:"short"})}</td><td>${esc(exName(s.ex))}</td><td>${s.wpm!=null?s.wpm:"–"}</td><td>${pct(s.score)}</td><td>${s.eff!=null?(s.score<THRESHOLD?"sayılmadı":s.eff):"–"}</td></tr>`).join("")}
+      </tbody></table></div>${attn}`;
+  }).join("");
+  shell(`<h1 class="title">İlerleme</h1><p class="muted" style="max-width:56ch">Etkili hız, okuma hızının anlama oranıyla çarpımıdır. Anlaması %70’in altında kalan seanslar ilerlemeye sayılmaz. Diller ayrı izlenir; Türkçe ve İngilizce hızını karşılaştırmak anlamlı değildir.</p>${sec}
+    <h2 class="sec" id="yedek">Yedekle ve taşı</h2>
+    <p class="muted small" style="max-width:56ch">Veriler yalnızca bu cihazda. Telefonla bilgisayar arasında taşımak için birinde dışa aktar, diğerinde içe aktar; iki taraftaki seanslar birleştirilir, aynı seans iki kez eklenmez. Ara sıra yedek almak iyi olur.</p>
+    <div class="row"><button class="btn ghost sm" data-exp>Dosya olarak dışa aktar</button><button class="btn ghost sm" data-cpy>Panoya kopyala</button><label class="btn ghost sm" style="cursor:pointer">Dosyadan içe aktar<input type="file" accept="application/json,.json" data-imf class="hidden"></label></div>
+    <details style="margin-top:12px"><summary class="small">Yapıştırarak içe aktar</summary><textarea data-imt style="margin-top:8px" placeholder="Yedek metnini buraya yapıştır"></textarea><p><button class="btn sm" data-imb>İçe aktar</button></p></details>
+    <p data-ims></p>`, "stats");
+  $("[data-exp]").onclick = exportBackup;
+  $("[data-cpy]").onclick = copyBackup;
+  const showImp = r=>{ if(r.ok){ viewStats(); toast(r.text); } else { $("[data-ims]").innerHTML = `<span class="err">${esc(r.text)}</span>`; } };
+  $("[data-imf]").onchange = e=>{ const f = e.target.files && e.target.files[0]; if(!f) return; const rd = new FileReader(); rd.onload = ()=>showImp(importBackup(String(rd.result))); rd.readAsText(f); };
+  $("[data-imb]").onclick = ()=>showImp(importBackup($("[data-imt]").value));
+}
+
+const VIEWS = {home:viewHome, texts:viewTexts, stats:viewStats};
+loadLocal(); setFoot(); viewHome();
+if(navigator.storage && navigator.storage.persist){ navigator.storage.persist().catch(()=>{}); }
+if("serviceWorker" in navigator){ window.addEventListener("load", ()=>navigator.serviceWorker.register("sw.js").catch(e=>console.warn(e))); }
+</script>
+</body>
+</html>
