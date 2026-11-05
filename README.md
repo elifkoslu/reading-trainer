@@ -2,6 +2,8 @@
 
 A small, phone-first app for practising reading speed **and** comprehension, in Turkish and English. It measures your level first, then sets the pace of every other exercise from that measurement, and tracks words per minute together with how much you understood.
 
+**Live:** https://elifkoslu.github.io/reading-trainer/ (Turkish interface, Turkish and English texts). It installs to the phone's home screen from the browser.
+
 <img src="docs/screenshots/pacer.png" alt="Paced reading exercise: a highlight moves through the text" width="300">
 
 ---
@@ -37,7 +39,7 @@ This app treats speed and understanding as one score, adapts to the reader's own
 | Offline and install | Web app manifest and a small service worker (`sw.js`) |
 | Data | Browser `localStorage`. No accounts, no backend, no analytics. |
 | Fonts | Literata and Manrope from Google Fonts (the only outside request) |
-| Hosting | Vercel (static) |
+| Hosting | GitHub Pages (static) |
 
 ## Status
 
